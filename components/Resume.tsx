@@ -1,6 +1,7 @@
 
 import React from 'react';
-import { RESUME_EXPERIENCE } from '../constants';
+// Corrected import to use 'EXPERIENCE' instead of 'RESUME_EXPERIENCE'
+import { EXPERIENCE } from '../constants';
 
 const Resume: React.FC = () => {
   return (
@@ -17,7 +18,8 @@ const Resume: React.FC = () => {
         </div>
 
         <div className="space-y-12">
-          {RESUME_EXPERIENCE.map((exp, idx) => (
+          {/* Updated the map to use the correctly imported 'EXPERIENCE' */}
+          {EXPERIENCE.map((exp, idx) => (
             <div key={exp.id} className="flex flex-col md:flex-row gap-8 relative">
               <div className="md:w-1/4">
                 <span className="text-xl font-bold text-blue-600">{exp.year}</span>
