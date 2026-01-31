@@ -559,7 +559,7 @@ export default function ExperiencePage() {
       <Navbar />
 
       {/* Hero Section */}
-      <section className="pt-32 pb-16 relative overflow-hidden">
+      <section className="pt-40 pb-16 relative overflow-hidden">
         <VideoBackground type="experience" opacity={0.5} />
 
         {/* Additional decorative elements */}

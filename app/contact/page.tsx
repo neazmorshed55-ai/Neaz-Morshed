@@ -70,9 +70,9 @@ export default function ContactPage() {
     <div className="bg-[#0b0f1a] text-white min-h-screen selection:bg-[#2ecc71] selection:text-slate-900">
       <Navbar />
 
-      <main className="pt-32 pb-24">
+      <main className="pb-24">
         {/* Hero Section */}
-        <section className="relative overflow-hidden mb-20">
+        <section className="relative overflow-hidden mb-20 pt-40 pb-20">
           <VideoBackground type="contact" opacity={0.5} />
           <div className="container mx-auto px-6 max-w-7xl relative z-10 py-8">
             <motion.div
