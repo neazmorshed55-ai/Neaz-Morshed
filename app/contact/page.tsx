@@ -72,26 +72,28 @@ export default function ContactPage() {
 
       <main className="pt-32 pb-24">
         {/* Hero Section */}
-        <section className="container mx-auto px-6 max-w-7xl mb-20 relative">
+        <section className="relative overflow-hidden mb-20">
           <VideoBackground type="contact" opacity={0.4} />
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <span className="text-[#2ecc71] text-[11px] font-black uppercase tracking-[0.5em] mb-6 block">Get In Touch</span>
-            <h1 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-none mb-6">
-              Let's <span className="text-gradient">Connect</span>
-            </h1>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-              Have a project in mind or want to discuss collaboration opportunities? I'm here to help turn your ideas into reality.
-            </p>
-          </motion.div>
+          <div className="container mx-auto px-6 max-w-7xl relative z-10 py-8">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center"
+            >
+              <span className="text-[#2ecc71] text-[11px] font-black uppercase tracking-[0.5em] mb-6 block">Get In Touch</span>
+              <h1 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-none mb-6">
+                Let's <span className="text-gradient">Connect</span>
+              </h1>
+              <p className="text-slate-400 text-lg max-w-2xl mx-auto">
+                Have a project in mind or want to discuss collaboration opportunities? I'm here to help turn your ideas into reality.
+              </p>
+            </motion.div>
+          </div>
         </section>
 
         {/* Contact Section */}
-        <section className="container mx-auto px-6 max-w-7xl">
+        <section className="py-20 bg-slate-900/20 container mx-auto px-6 max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-16">
             {/* Contact Info */}
             <motion.div

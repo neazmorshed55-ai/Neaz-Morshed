@@ -165,22 +165,24 @@ export default function ReviewsPage() {
 
       <main className="pt-32 pb-24">
         {/* Hero Section */}
-        <section className="container mx-auto px-6 max-w-7xl mb-16 relative">
+        <section className="relative overflow-hidden mb-16">
           <VideoBackground type="reviews" opacity={0.4} />
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center"
-          >
-            <span className="text-[#2ecc71] text-[11px] font-black uppercase tracking-[0.5em] mb-6 block">Testimonials</span>
-            <h1 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-none mb-6">
-              Client <span className="text-gradient">Reviews</span>
-            </h1>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-              Don't just take my word for it. Here's what my clients from around the world have to say about working with me.
-            </p>
-          </motion.div>
+          <div className="container mx-auto px-6 max-w-7xl relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              className="text-center"
+            >
+              <span className="text-[#2ecc71] text-[11px] font-black uppercase tracking-[0.5em] mb-6 block">Testimonials</span>
+              <h1 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-none mb-6">
+                Client <span className="text-gradient">Reviews</span>
+              </h1>
+              <p className="text-slate-300 text-lg max-w-2xl mx-auto">
+                Don't just take my word for it. Here's what my clients from around the world have to say about working with me.
+              </p>
+            </motion.div>
+          </div>
         </section>
 
         {/* Stats Section */}
@@ -211,11 +213,10 @@ export default function ReviewsPage() {
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter as typeof activeFilter)}
-                className={`px-6 py-3 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all ${
-                  activeFilter === filter
-                    ? 'bg-[#2ecc71] text-slate-900'
-                    : 'bg-slate-900/60 border border-white/10 text-slate-400 hover:border-[#2ecc71]/30 hover:text-white'
-                }`}
+                className={`px-6 py-3 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all ${activeFilter === filter
+                  ? 'bg-[#2ecc71] text-slate-900'
+                  : 'bg-slate-900/60 border border-white/10 text-slate-400 hover:border-[#2ecc71]/30 hover:text-white'
+                  }`}
               >
                 {filter === 'all' ? 'All Reviews' : filter}
               </button>
@@ -348,7 +349,7 @@ export default function ReviewsPage() {
             <h2 className="text-3xl lg:text-4xl font-black uppercase tracking-tighter mb-6">
               Ready to Experience the <span className="text-gradient">Difference</span>?
             </h2>
-            <p className="text-slate-400 max-w-2xl mx-auto mb-10">
+            <p className="text-slate-300 max-w-2xl mx-auto mb-10">
               Join hundreds of satisfied clients who have transformed their business operations with my help.
             </p>
             <Link

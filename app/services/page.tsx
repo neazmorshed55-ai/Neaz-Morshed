@@ -90,7 +90,7 @@ export default function ServicesPage() {
       </section>
 
       {/* Services Grid */}
-      <section className="py-20">
+      <section className="py-20 bg-slate-900/20">
         <div className="container mx-auto px-6 max-w-7xl">
           {loading ? (
             <div className="flex items-center justify-center py-20">

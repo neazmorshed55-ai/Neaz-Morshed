@@ -628,16 +628,14 @@ export default function ExperiencePage() {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key as typeof activeTab)}
-                className={`px-6 py-3 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all flex items-center gap-2 ${
-                  activeTab === tab.key
+                className={`px-6 py-3 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all flex items-center gap-2 ${activeTab === tab.key
                     ? 'bg-[#2ecc71] text-slate-900'
                     : 'bg-slate-900/60 border border-white/10 text-slate-400 hover:border-[#2ecc71]/30 hover:text-white'
-                }`}
+                  }`}
               >
                 {tab.label}
-                <span className={`px-2 py-0.5 rounded-full text-[10px] ${
-                  activeTab === tab.key ? 'bg-slate-900/20' : 'bg-white/10'
-                }`}>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] ${activeTab === tab.key ? 'bg-slate-900/20' : 'bg-white/10'
+                  }`}>
                   {tab.count}
                 </span>
               </button>
@@ -647,7 +645,7 @@ export default function ExperiencePage() {
       </section>
 
       {/* Timeline Section */}
-      <section className="pb-20 relative">
+      <section className="py-20 bg-slate-900/20 relative">
         <div className="container mx-auto px-6 max-w-5xl">
           {/* Timeline */}
           <div className="relative">
@@ -661,26 +659,23 @@ export default function ExperiencePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.05 }}
-                className={`relative flex flex-col md:flex-row gap-8 mb-8 ${
-                  index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                }`}
+                className={`relative flex flex-col md:flex-row gap-8 mb-8 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                  }`}
               >
                 {/* Timeline Dot */}
                 <div className="absolute left-0 md:left-1/2 w-4 h-4 bg-[#2ecc71] rounded-full transform -translate-x-1/2 border-4 border-[#0b0f1a] shadow-[0_0_20px_rgba(46,204,113,0.5)] z-10"></div>
 
                 {/* Year Badge - Desktop */}
-                <div className={`hidden md:flex md:w-1/2 items-center ${
-                  index % 2 === 0 ? 'justify-end pr-12' : 'justify-start pl-12'
-                }`}>
+                <div className={`hidden md:flex md:w-1/2 items-center ${index % 2 === 0 ? 'justify-end pr-12' : 'justify-start pl-12'
+                  }`}>
                   <div className="text-center">
                     <div className="text-5xl font-black text-[#2ecc71]/20">
                       {exp.start_date.split(' ').pop()}
                     </div>
-                    <div className={`text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider mt-2 ${
-                      exp.type === 'full-time' ? 'bg-[#2ecc71]/20 text-[#2ecc71]' :
-                      exp.type === 'part-time' ? 'bg-blue-500/20 text-blue-400' :
-                      'bg-purple-500/20 text-purple-400'
-                    }`}>
+                    <div className={`text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider mt-2 ${exp.type === 'full-time' ? 'bg-[#2ecc71]/20 text-[#2ecc71]' :
+                        exp.type === 'part-time' ? 'bg-blue-500/20 text-blue-400' :
+                          'bg-purple-500/20 text-purple-400'
+                      }`}>
                       {exp.type}
                     </div>
                   </div>
@@ -689,20 +684,18 @@ export default function ExperiencePage() {
                 {/* Content Card */}
                 <div className={`md:w-1/2 pl-8 md:pl-0 ${index % 2 === 0 ? 'md:pl-12' : 'md:pr-12'}`}>
                   <div
-                    className={`p-6 rounded-3xl border transition-all duration-300 cursor-pointer ${
-                      expandedId === exp.id
+                    className={`p-6 rounded-3xl border transition-all duration-300 cursor-pointer ${expandedId === exp.id
                         ? 'bg-[#1a1f2e] border-[#2ecc71]/30 shadow-lg shadow-[#2ecc71]/10'
                         : 'bg-slate-900/40 border-white/5 hover:border-white/10'
-                    }`}
+                      }`}
                     onClick={() => setExpandedId(expandedId === exp.id ? null : exp.id)}
                   >
                     {/* Mobile Type Badge & Year */}
                     <div className="md:hidden flex items-center gap-3 mb-3">
-                      <span className={`text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider ${
-                        exp.type === 'full-time' ? 'bg-[#2ecc71]/20 text-[#2ecc71]' :
-                        exp.type === 'part-time' ? 'bg-blue-500/20 text-blue-400' :
-                        'bg-purple-500/20 text-purple-400'
-                      }`}>
+                      <span className={`text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider ${exp.type === 'full-time' ? 'bg-[#2ecc71]/20 text-[#2ecc71]' :
+                          exp.type === 'part-time' ? 'bg-blue-500/20 text-blue-400' :
+                            'bg-purple-500/20 text-purple-400'
+                        }`}>
                         {exp.type}
                       </span>
                       <span className="text-[#2ecc71] text-xs font-bold">
@@ -717,17 +710,15 @@ export default function ExperiencePage() {
                           <Building2 size={16} className="text-[#2ecc71]" />
                           <span className="text-slate-400 text-sm font-medium">{exp.company}</span>
                         </div>
-                        <h3 className={`text-xl font-black transition-colors ${
-                          expandedId === exp.id ? 'text-[#2ecc71]' : 'text-white'
-                        }`}>
+                        <h3 className={`text-xl font-black transition-colors ${expandedId === exp.id ? 'text-[#2ecc71]' : 'text-white'
+                          }`}>
                           {exp.position}
                         </h3>
                       </div>
                       <ChevronDown
                         size={20}
-                        className={`text-slate-500 transition-transform duration-300 flex-shrink-0 ${
-                          expandedId === exp.id ? 'rotate-180 text-[#2ecc71]' : ''
-                        }`}
+                        className={`text-slate-500 transition-transform duration-300 flex-shrink-0 ${expandedId === exp.id ? 'rotate-180 text-[#2ecc71]' : ''
+                          }`}
                       />
                     </div>
 
