@@ -120,6 +120,16 @@ export default function SkillPortfolioPage() {
     fetchData();
   }, []);
 
+  // Helper to generate slug from title
+  const generateSlug = (title: string) => {
+    return title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+  };
+
+  // Get slug for category (use existing or generate from title)
+  const getCategorySlug = (category: SkillCategory) => {
+    return category.slug || generateSlug(category.title);
+  };
+
   const getSubSkillsForCategory = (categoryId: string) => {
     return subSkills.filter(skill => skill.category_id === categoryId);
   };
@@ -223,7 +233,7 @@ export default function SkillPortfolioPage() {
                     onMouseLeave={() => setHoveredCategory(null)}
                     className="relative"
                   >
-                    <Link href={`/skills/portfolio/${category.slug}`}>
+                    <Link href={`/skills/portfolio/${getCategorySlug(category)}`}>
                       <div className={`flex items-center gap-6 p-5 rounded-2xl cursor-pointer transition-all duration-300 group ${
                         hoveredCategory === category.id
                           ? 'bg-[#1a1f2e] border-l-4 border-[#2ecc71] shadow-lg'
@@ -290,7 +300,7 @@ export default function SkillPortfolioPage() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.2, delay: index * 0.05 }}
                           >
-                            <Link href={`/skills/portfolio/${category?.slug}/${skill.slug}`}>
+                            <Link href={`/skills/portfolio/${category ? getCategorySlug(category) : 'unknown'}/${skill.slug || generateSlug(skill.title)}`}>
                               <div className="p-4 bg-[#c9a089] hover:bg-[#d4b19a] text-slate-900 rounded-xl font-semibold transition-all hover:translate-x-2 hover:shadow-lg cursor-pointer group">
                                 <span className="flex items-center justify-between">
                                   <span className="underline underline-offset-2">{skill.title}</span>

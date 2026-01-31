@@ -126,6 +126,11 @@ const defaultSubSkills: { [key: string]: SubSkill[] } = {
   ],
 };
 
+// Helper to generate slug from title
+const generateSlug = (title: string) => {
+  return title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+};
+
 export default function CategoryPage() {
   const params = useParams();
   const categorySlug = params.category as string;
@@ -285,7 +290,7 @@ export default function CategoryPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <Link href={`/skills/portfolio/${categorySlug}/${skill.slug}`}>
+                <Link href={`/skills/portfolio/${categorySlug}/${skill.slug || generateSlug(skill.title)}`}>
                   <div className="group relative overflow-hidden rounded-3xl border border-white/5 hover:border-[#2ecc71]/40 transition-all duration-500 bg-slate-900/60 h-full">
                     {/* Image */}
                     <div className="aspect-video relative overflow-hidden">
