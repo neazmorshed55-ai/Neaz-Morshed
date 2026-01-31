@@ -88,6 +88,7 @@ export default function ContactPage() {
           <div className="hidden lg:flex items-center gap-10">
             <Link href="/" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Home</Link>
             <Link href="/skills" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Skills</Link>
+            <Link href="/resume" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Resume</Link>
             <Link href="/services" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Services</Link>
             <Link href="/experience" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Experience</Link>
             <Link href="/reviews" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Reviews</Link>
@@ -114,6 +115,7 @@ export default function ContactPage() {
             </button>
             <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="text-4xl font-black text-white hover:text-[#2ecc71] transition-colors uppercase tracking-tighter">Home</Link>
             <Link href="/skills" onClick={() => setIsMobileMenuOpen(false)} className="text-4xl font-black text-white hover:text-[#2ecc71] transition-colors uppercase tracking-tighter">Skills</Link>
+            <Link href="/resume" onClick={() => setIsMobileMenuOpen(false)} className="text-4xl font-black text-white hover:text-[#2ecc71] transition-colors uppercase tracking-tighter">Resume</Link>
             <Link href="/services" onClick={() => setIsMobileMenuOpen(false)} className="text-4xl font-black text-white hover:text-[#2ecc71] transition-colors uppercase tracking-tighter">Services</Link>
             <Link href="/experience" onClick={() => setIsMobileMenuOpen(false)} className="text-4xl font-black text-white hover:text-[#2ecc71] transition-colors uppercase tracking-tighter">Experience</Link>
             <Link href="/reviews" onClick={() => setIsMobileMenuOpen(false)} className="text-4xl font-black text-white hover:text-[#2ecc71] transition-colors uppercase tracking-tighter">Reviews</Link>
