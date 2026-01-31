@@ -8,6 +8,8 @@ import {
   Layout, Video, Search, Loader2
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import Navbar from '../../components/Navbar';
+import VideoBackground from '../../components/VideoBackground';
 
 interface Service {
   id: string;
@@ -56,31 +58,13 @@ export default function ServicesPage() {
 
   return (
     <div className="bg-[#0b0f1a] text-white min-h-screen">
-      {/* Navigation */}
-      <nav className="fixed top-0 left-0 w-full z-[100] bg-[#0b0f1a]/90 backdrop-blur-2xl border-b border-white/5 py-4">
-        <div className="container mx-auto px-6 lg:px-12 flex justify-between items-center max-w-7xl">
-          <Link href="/" className="flex items-center gap-4 group cursor-pointer">
-            <div className="w-12 h-12 bg-[#2ecc71] rounded-2xl flex items-center justify-center font-black text-slate-950 group-hover:rotate-6 transition-all shadow-[0_0_30px_rgba(46,204,113,0.3)]">NM</div>
-            <div className="flex flex-col">
-              <span className="text-xl font-extrabold tracking-tighter leading-none">NEAZ MORSHED</span>
-              <span className="text-[10px] text-[#2ecc71] font-bold tracking-[0.2em] mt-1 uppercase">Top Rated Pro</span>
-            </div>
-          </Link>
-
-          <div className="hidden lg:flex items-center gap-10">
-            <Link href="/" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Home</Link>
-            <Link href="/skills" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Skills</Link>
-            <Link href="/services" className="text-[11px] font-bold tracking-[0.3em] text-[#2ecc71] transition-all uppercase">Services</Link>
-            <Link href="/experience" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Experience</Link>
-            <Link href="/reviews" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Reviews</Link>
-            <Link href="/contact" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Contact</Link>
-            <Link href="/resume" className="bg-[#2ecc71] text-slate-950 px-8 py-4 rounded-2xl font-black text-[11px] tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-[#2ecc71]/20 uppercase">Resume</Link>
-          </div>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <section className="pt-40 pb-20 relative overflow-hidden">
+        <VideoBackground type="services" opacity={0.12} />
+
+        {/* Additional decorative elements */}
         <div className="absolute top-[10%] left-[5%] w-[600px] h-[600px] bg-[#2ecc71]/5 rounded-full blur-[180px] pointer-events-none"></div>
 
         <div className="container mx-auto px-6 max-w-7xl relative z-10">

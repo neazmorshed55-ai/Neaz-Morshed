@@ -4,10 +4,12 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
-  Menu, X, Star, Quote, Linkedin, Facebook,
+  Star, Quote, Linkedin, Facebook,
   ExternalLink, ThumbsUp, MessageCircle, Users
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import Navbar from '../../components/Navbar';
+import VideoBackground from '../../components/VideoBackground';
 
 interface Review {
   id: string | number;
@@ -23,8 +25,6 @@ interface Review {
 }
 
 export default function ReviewsPage() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<'all' | 'facebook' | 'linkedin' | 'fiverr'>('all');
   const [reviews, setReviews] = useState<Review[]>([]);
 
@@ -92,12 +92,6 @@ export default function ReviewsPage() {
     }
   ];
 
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
   // Fetch reviews from Supabase
   useEffect(() => {
     const fetchReviews = async () => {
@@ -163,58 +157,12 @@ export default function ReviewsPage() {
 
   return (
     <div className="bg-[#0b0f1a] text-white min-h-screen selection:bg-[#2ecc71] selection:text-slate-900">
-      {/* Navigation */}
-      <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${isScrolled ? 'bg-[#0b0f1a]/90 backdrop-blur-2xl border-b border-white/5 py-4' : 'bg-transparent py-8'}`}>
-        <div className="container mx-auto px-6 lg:px-12 flex justify-between items-center max-w-7xl">
-          <Link href="/" className="flex items-center gap-4 group cursor-pointer">
-            <div className="w-12 h-12 bg-[#2ecc71] rounded-2xl flex items-center justify-center font-black text-slate-950 group-hover:rotate-6 transition-all shadow-[0_0_30px_rgba(46,204,113,0.3)]">NM</div>
-            <div className="flex flex-col">
-              <span className="text-xl font-extrabold tracking-tighter leading-none">NEAZ MORSHED</span>
-              <span className="text-[10px] text-[#2ecc71] font-bold tracking-[0.2em] mt-1 uppercase">Top Rated Pro</span>
-            </div>
-          </Link>
-
-          <div className="hidden lg:flex items-center gap-10">
-            <Link href="/" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Home</Link>
-            <Link href="/skills" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Skills</Link>
-            <Link href="/services" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Services</Link>
-            <Link href="/experience" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Experience</Link>
-            <Link href="/reviews" className="text-[11px] font-bold tracking-[0.3em] text-[#2ecc71] transition-all uppercase">Reviews</Link>
-            <Link href="/contact" className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">Contact</Link>
-            <Link href="/resume" className="bg-[#2ecc71] text-slate-950 px-8 py-4 rounded-2xl font-black text-[11px] tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg shadow-[#2ecc71]/20 uppercase">Resume</Link>
-          </div>
-
-          <button className="lg:hidden p-2 text-[#2ecc71]" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-            {isMobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
-          </button>
-        </div>
-      </nav>
-
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            className="lg:hidden fixed inset-0 bg-[#0b0f1a] z-[110] flex flex-col items-center justify-center gap-8 p-6"
-          >
-            <button className="absolute top-8 right-8 text-[#2ecc71]" onClick={() => setIsMobileMenuOpen(false)}>
-              <X size={40} />
-            </button>
-            <Link href="/" onClick={() => setIsMobileMenuOpen(false)} className="text-4xl font-black text-white hover:text-[#2ecc71] transition-colors uppercase tracking-tighter">Home</Link>
-            <Link href="/skills" onClick={() => setIsMobileMenuOpen(false)} className="text-4xl font-black text-white hover:text-[#2ecc71] transition-colors uppercase tracking-tighter">Skills</Link>
-            <Link href="/services" onClick={() => setIsMobileMenuOpen(false)} className="text-4xl font-black text-white hover:text-[#2ecc71] transition-colors uppercase tracking-tighter">Services</Link>
-            <Link href="/experience" onClick={() => setIsMobileMenuOpen(false)} className="text-4xl font-black text-white hover:text-[#2ecc71] transition-colors uppercase tracking-tighter">Experience</Link>
-            <Link href="/reviews" onClick={() => setIsMobileMenuOpen(false)} className="text-4xl font-black text-[#2ecc71] transition-colors uppercase tracking-tighter">Reviews</Link>
-            <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} className="text-4xl font-black text-white hover:text-[#2ecc71] transition-colors uppercase tracking-tighter">Contact</Link>
-            <Link href="/resume" onClick={() => setIsMobileMenuOpen(false)} className="text-4xl font-black text-[#2ecc71] transition-colors uppercase tracking-tighter">Resume</Link>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <Navbar />
 
       <main className="pt-32 pb-24">
         {/* Hero Section */}
-        <section className="container mx-auto px-6 max-w-7xl mb-16">
+        <section className="container mx-auto px-6 max-w-7xl mb-16 relative">
+          <VideoBackground type="reviews" opacity={0.1} />
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
