@@ -72,7 +72,7 @@ export default function ContactPage() {
 
       <main className="pb-24">
         {/* Hero Section */}
-        <section className="relative overflow-hidden mb-20 pt-40 pb-20">
+        <section className="relative overflow-hidden mb-20 pt-32 pb-20 min-h-[55vh] flex flex-col justify-center">
           <VideoBackground type="contact" opacity={0.5} />
           <div className="container mx-auto px-6 max-w-7xl relative z-10 py-8">
             <motion.div
