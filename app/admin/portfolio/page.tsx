@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
   Plus, Edit2, Trash2, Search, Loader2, X,
-  Star, ArrowLeft, Save, Image, ExternalLink
+  Star, ArrowLeft, Save, Image, ExternalLink, Upload
 } from 'lucide-react';
 import ProtectedRoute from '../../../components/admin/ProtectedRoute';
 import { supabase } from '../../../lib/supabase';
@@ -44,6 +44,7 @@ export default function PortfolioManagement() {
   const [editingItem, setEditingItem] = useState<PortfolioItem | null>(null);
   const [saving, setSaving] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [uploadingThumbnail, setUploadingThumbnail] = useState(false);
 
   const [formData, setFormData] = useState({
     service_id: '',
@@ -202,6 +203,31 @@ export default function PortfolioManagement() {
       console.error('Error deleting portfolio item:', error);
     }
     setDeleteConfirm(null);
+  };
+
+  const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !supabase) return;
+
+    setUploadingThumbnail(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `portfolio-${Date.now()}.${fileExt}`;
+      const filePath = `portfolio/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage.from('images').getPublicUrl(filePath);
+      setFormData({ ...formData, thumbnail_url: data.publicUrl });
+    } catch (error) {
+      console.error('Error uploading thumbnail:', error);
+      alert('Error uploading thumbnail. Please try again.');
+    }
+    setUploadingThumbnail(false);
   };
 
   return (
@@ -413,15 +439,60 @@ export default function PortfolioManagement() {
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Thumbnail URL</label>
-                      <input
-                        type="text"
-                        value={formData.thumbnail_url}
-                        onChange={(e) => setFormData({ ...formData, thumbnail_url: e.target.value })}
-                        className="w-full bg-slate-800/50 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-[#2ecc71]/50"
-                        placeholder="https://..."
-                      />
+                    <div className="col-span-2">
+                      <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Thumbnail Image</label>
+                      <div className="flex items-start gap-4">
+                        {/* Preview */}
+                        <div className="w-32 h-20 rounded-xl bg-slate-800/50 border-2 border-dashed border-white/20 flex items-center justify-center overflow-hidden flex-shrink-0">
+                          {formData.thumbnail_url ? (
+                            <img
+                              src={formData.thumbnail_url}
+                              alt="Thumbnail"
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <Image size={24} className="text-slate-600" />
+                          )}
+                        </div>
+                        {/* Upload & URL */}
+                        <div className="flex-1 space-y-2">
+                          <label className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 border border-white/10 rounded-xl cursor-pointer hover:bg-slate-800 hover:border-[#2ecc71]/30 transition-all w-fit">
+                            {uploadingThumbnail ? (
+                              <Loader2 size={18} className="text-[#2ecc71] animate-spin" />
+                            ) : (
+                              <Upload size={18} className="text-[#2ecc71]" />
+                            )}
+                            <span className="text-slate-400 text-sm">{uploadingThumbnail ? 'Uploading...' : 'Upload Image'}</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={handleThumbnailUpload}
+                              className="hidden"
+                              disabled={uploadingThumbnail}
+                            />
+                          </label>
+                          <div className="flex items-center gap-2">
+                            <span className="text-slate-600 text-xs">or</span>
+                            <input
+                              type="text"
+                              value={formData.thumbnail_url}
+                              onChange={(e) => setFormData({ ...formData, thumbnail_url: e.target.value })}
+                              className="flex-1 bg-slate-800/50 border border-white/10 rounded-lg py-2 px-3 text-white text-sm focus:outline-none focus:border-[#2ecc71]/50"
+                              placeholder="Paste URL..."
+                            />
+                            {formData.thumbnail_url && (
+                              <button
+                                type="button"
+                                onClick={() => setFormData({ ...formData, thumbnail_url: '' })}
+                                className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                              >
+                                <X size={16} />
+                              </button>
+                            )}
+                          </div>
+                          <p className="text-slate-600 text-xs">Upload or paste URL. Auto thumbnail will show if empty.</p>
+                        </div>
+                      </div>
                     </div>
 
                     <div>
