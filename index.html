@@ -1,59 +1,649 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Neaz Md. Morshed | Virtual Assistant & Professional Outsourcer</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      scroll-behavior: smooth;
-      background-color: #0b0f1a;
-      color: #f8fafc;
-    }
-    ::-webkit-scrollbar {
-      width: 10px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0b0f1a;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #2ecc71;
-      border-radius: 5px;
-    }
-    .glass-nav {
-      background: rgba(11, 15, 26, 0.8);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-    .text-gradient {
-      background: linear-gradient(to right, #2ecc71, #27ae60);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-  </style>
-<script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@19.0.0",
-    "react-dom": "https://esm.sh/react-dom@19.0.0",
-    "react-dom/client": "https://esm.sh/react-dom@19.0.0/client",
-    "lucide-react": "https://esm.sh/lucide-react@0.460.0?external=react",
-    "framer-motion": "https://esm.sh/framer-motion@11.11.11?external=react,react-dom",
-    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.45.4",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/"
-  }
-}
-</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neaz Md. Morshed | Virtual Assistant & Professional Outsourcer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
+            --light: #f1f1f1;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--light);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, rgba(26,26,46,0.9), rgba(22,33,62,0.9)),
+                        url('data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 0h100v100H0z" fill="none"/%3E%3Cpath d="M50 0L100 50L50 100L0 50z" fill="rgba(233,69,96,0.05)"/%3E%3C/svg%3E');
+            background-size: cover;
+            animation: fadeIn 1s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .animate-slideUp {
+            animation: slideUp 0.8s ease-out forwards;
+        }
+        
+        .animate-slideInLeft {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--highlight);
+            transition: width 0.3s;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .skill-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .skill-progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--highlight), #ff6b9d);
+            border-radius: 10px;
+            transition: width 1.5s ease-out;
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { opacity: 0.8; }
+        }
+        
+        .card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            background: rgba(255,255,255,0.08);
+            border-color: var(--highlight);
+            box-shadow: 0 20px 40px rgba(233,69,96,0.2);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--highlight), #ff6b9d);
+            color: white;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(233,69,96,0.4);
+        }
+        
+        .section-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--highlight), #ff6b9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .experience-card {
+            position: relative;
+            padding-left: 2rem;
+            border-left: 2px solid var(--highlight);
+            margin-bottom: 2rem;
+        }
+        
+        .experience-card::before {
+            content: '';
+            position: absolute;
+            left: -9px;
+            top: 0;
+            width: 16px;
+            height: 16px;
+            background: var(--highlight);
+            border-radius: 50%;
+            border: 3px solid var(--secondary);
+        }
+        
+        .portfolio-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(233,69,96,0.9), rgba(255,107,157,0.9));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .portfolio-item:hover .portfolio-overlay {
+            opacity: 1;
+        }
+        
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(26,26,46,0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            transition: all 0.3s;
+        }
+        
+        .navbar.scrolled {
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .nav-menu {
+                display: none;
+            }
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
 </head>
-<body class="overflow-x-hidden">
-  <div id="root"></div>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <div class="text-2xl font-bold">
+                <span style="color: var(--highlight);">N</span>eaz
+            </div>
+            <div class="nav-menu hidden md:flex space-x-8">
+                <a href="#home" class="nav-link hover:text-pink-400">HOME</a>
+                <a href="#skills" class="nav-link hover:text-pink-400">SKILLS</a>
+                <a href="#experience" class="nav-link hover:text-pink-400">EXPERIENCE</a>
+                <a href="#services" class="nav-link hover:text-pink-400">SERVICES</a>
+                <a href="#portfolio" class="nav-link hover:text-pink-400">PORTFOLIO</a>
+                <a href="#contact" class="nav-link hover:text-pink-400">CONTACT</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="container mx-auto px-6 text-center">
+            <div class="animate-slideUp">
+                <h1 class="text-6xl md:text-8xl font-bold mb-6">
+                    I'M <span style="color: var(--highlight);">Neaz Md. Morshed</span>
+                </h1>
+                <p class="text-2xl md:text-3xl mb-4 text-gray-300" style="font-family: 'Playfair Display', serif;">
+                    FREELANCE CONSULTANT - VIRTUAL ASSISTANT PORTFOLIO
+                </p>
+                <p class="text-xl mb-8 text-gray-400 max-w-2xl mx-auto">
+                    Professional Virtual Assistant with 10+ years of experience in online and offline marketplace
+                </p>
+                <a href="#contact" class="btn-primary">Let's Work Together</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 px-6">
+        <div class="container mx-auto">
+            <h2 class="section-title text-center mb-16">PROFESSIONAL SKILLS</h2>
+            
+            <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+                <div class="card">
+                    <h3 class="text-2xl font-semibold mb-8">Technical Expertise</h3>
+                    
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Video Production</span>
+                            <span class="text-pink-400">95%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 95%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Graphic Design</span>
+                            <span class="text-pink-400">95%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 95%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">eBook Formatting</span>
+                            <span class="text-pink-400">95%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 95%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">WordPress Design</span>
+                            <span class="text-pink-400">90%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 90%;"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="text-2xl font-semibold mb-8">Core Competencies</h3>
+                    
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Virtual Assistant Service</span>
+                            <span class="text-pink-400">95%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 95%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Social Media Marketing</span>
+                            <span class="text-pink-400">85%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <div class="flex justify-between mb-2">
+                            <span class="font-medium">Content Writing</span>
+                            <span class="text-pink-400">80%</span>
+                        </div>
+                        <div class="skill-bar">
+                            <div class="skill-progress" style="width: 80%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Other Experiences -->
+            <div class="mt-20">
+                <h3 class="text-3xl font-bold text-center mb-12">Other Experiences</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="card text-center">
+                        <div class="text-5xl mb-4">💻</div>
+                        <h4 class="text-xl font-semibold mb-3">HTML, CSS & JavaScript</h4>
+                        <p class="text-gray-400 text-sm">Extensive front-end development experience with modern web technologies</p>
+                    </div>
+                    
+                    <div class="card text-center">
+                        <div class="text-5xl mb-4">🌐</div>
+                        <h4 class="text-xl font-semibold mb-3">WordPress & Wix</h4>
+                        <p class="text-gray-400 text-sm">9 years expertise in website development and customization</p>
+                    </div>
+                    
+                    <div class="card text-center">
+                        <div class="text-5xl mb-4">🎬</div>
+                        <h4 class="text-xl font-semibold mb-3">Adobe Premiere Pro</h4>
+                        <p class="text-gray-400 text-sm">9 years experience in professional video editing</p>
+                    </div>
+                    
+                    <div class="card text-center">
+                        <div class="text-5xl mb-4">🎨</div>
+                        <h4 class="text-xl font-semibold mb-3">Adobe Photoshop</h4>
+                        <p class="text-gray-400 text-sm">9 years experience in online and offline marketplaces</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 px-6" style="background: rgba(0,0,0,0.2);">
+        <div class="container mx-auto">
+            <h2 class="section-title text-center mb-16">SERVICES</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="card text-center">
+                    <div class="text-5xl mb-4">📊</div>
+                    <h3 class="text-2xl font-semibold mb-4">Virtual Assistant</h3>
+                    <p class="text-gray-400">Comprehensive administrative support including data entry, research, email management, and scheduling</p>
+                </div>
+                
+                <div class="card text-center">
+                    <div class="text-5xl mb-4">🎥</div>
+                    <h3 class="text-2xl font-semibold mb-4">Video Production</h3>
+                    <p class="text-gray-400">Professional video editing, YouTube management, and content creation using Adobe Premiere Pro</p>
+                </div>
+                
+                <div class="card text-center">
+                    <div class="text-5xl mb-4">✨</div>
+                    <h3 class="text-2xl font-semibold mb-4">Graphic Design</h3>
+                    <p class="text-gray-400">Custom graphics, photo retouching, eBook design, and brand materials using Photoshop & Canva</p>
+                </div>
+                
+                <div class="card text-center">
+                    <div class="text-5xl mb-4">🌐</div>
+                    <h3 class="text-2xl font-semibold mb-4">Web Development</h3>
+                    <p class="text-gray-400">WordPress & Wix website development, customization, and maintenance</p>
+                </div>
+                
+                <div class="card text-center">
+                    <div class="text-5xl mb-4">📱</div>
+                    <h3 class="text-2xl font-semibold mb-4">Social Media</h3>
+                    <p class="text-gray-400">Social media account management, content creation, and marketing strategies</p>
+                </div>
+                
+                <div class="card text-center">
+                    <div class="text-5xl mb-4">📝</div>
+                    <h3 class="text-2xl font-semibold mb-4">Content Writing</h3>
+                    <p class="text-gray-400">Professional content creation, blog writing, and copywriting services</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-20 px-6">
+        <div class="container mx-auto">
+            <h2 class="section-title text-center mb-16">PROFESSIONAL EXPERIENCE</h2>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="experience-card">
+                    <div class="flex justify-between items-start mb-2 flex-wrap">
+                        <h3 class="text-xl font-semibold text-pink-400">Youtube Manager</h3>
+                        <span class="text-gray-400">January 2021 - Present</span>
+                    </div>
+                    <h4 class="text-lg mb-2">Aura Relax</h4>
+                    <p class="text-gray-400">8 hours relaxing video production and YouTube channel management with comment moderation</p>
+                </div>
+                
+                <div class="experience-card">
+                    <div class="flex justify-between items-start mb-2 flex-wrap">
+                        <h3 class="text-xl font-semibold text-pink-400">Virtual Assistant</h3>
+                        <span class="text-gray-400">February 2022 - Present</span>
+                    </div>
+                    <h4 class="text-lg mb-2">Release Media Inc.</h4>
+                    <p class="text-gray-400">Remote part-time position managing scripts, orders, and content creation including PDFs, videos, podcasts, and SEO optimization</p>
+                </div>
+                
+                <div class="experience-card">
+                    <div class="flex justify-between items-start mb-2 flex-wrap">
+                        <h3 class="text-xl font-semibold text-pink-400">VA for Websites</h3>
+                        <span class="text-gray-400">October 2023 - January 2024</span>
+                    </div>
+                    <h4 class="text-lg mb-2">Alise Spiritual Healing & Wellness Center</h4>
+                    <p class="text-gray-400">SSL certification, WordPress management, banner design, and website maintenance</p>
+                </div>
+                
+                <div class="experience-card">
+                    <div class="flex justify-between items-start mb-2 flex-wrap">
+                        <h3 class="text-xl font-semibold text-pink-400">Virtual Assistant</h3>
+                        <span class="text-gray-400">October 2023 - February 2024</span>
+                    </div>
+                    <h4 class="text-lg mb-2">Suson Essential</h4>
+                    <p class="text-gray-400">StreamYard video management, Constant Contact management, and YouTube content creation</p>
+                </div>
+                
+                <div class="experience-card">
+                    <div class="flex justify-between items-start mb-2 flex-wrap">
+                        <h3 class="text-xl font-semibold text-pink-400">Media and Web Design Coordinator</h3>
+                        <span class="text-gray-400">January 2021 - December 2022</span>
+                    </div>
+                    <h4 class="text-lg mb-2">The Global Council for Anthropological Linguistics - GLOCAL</h4>
+                    <p class="text-gray-400">Web development and design for multiple organizational websites using WordPress</p>
+                </div>
+                
+                <div class="experience-card">
+                    <div class="flex justify-between items-start mb-2 flex-wrap">
+                        <h3 class="text-xl font-semibold text-pink-400">Personal Virtual Assistant</h3>
+                        <span class="text-gray-400">December 2022 - December 2023</span>
+                    </div>
+                    <h4 class="text-lg mb-2">Joey Guillory</h4>
+                    <p class="text-gray-400">Job applications via Lazy app, Indeed, and LinkedIn, web research, and Excel work</p>
+                </div>
+                
+                <div class="experience-card">
+                    <div class="flex justify-between items-start mb-2 flex-wrap">
+                        <h3 class="text-xl font-semibold text-pink-400">Team Leader - Brand & Communication</h3>
+                        <span class="text-gray-400">January 2020 - October 2022</span>
+                    </div>
+                    <h4 class="text-lg mb-2">Tritech Building Services Ltd.</h4>
+                    <p class="text-gray-400">Brand promotion and communication strategy</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="py-20 px-6" style="background: rgba(0,0,0,0.2);">
+        <div class="container mx-auto">
+            <h2 class="section-title text-center mb-16">RECENT PROJECTS</h2>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Video Transcription</h3>
+                    <div class="space-y-2 text-sm text-gray-400">
+                        <p>• YouTube Video</p>
+                        <p>• ChatGPT Integration</p>
+                        <p>• Chrome Extension</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">LinkedIn Services</h3>
+                    <div class="space-y-2 text-sm text-gray-400">
+                        <p>• Job Portal Management</p>
+                        <p>• Cover Letter Writing</p>
+                        <p>• Profile Optimization</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Book Design</h3>
+                    <div class="space-y-2 text-sm text-gray-400">
+                        <p>• Book Cover Design</p>
+                        <p>• eBook Design</p>
+                        <p>• eBook Formatting</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Graphic Design</h3>
+                    <div class="space-y-2 text-sm text-gray-400">
+                        <p>• Adobe Photoshop</p>
+                        <p>• Photo Retouching</p>
+                        <p>• Brand Materials</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Virtual Assistance</h3>
+                    <div class="space-y-2 text-sm text-gray-400">
+                        <p>• Data Scraping</p>
+                        <p>• Data Entry</p>
+                        <p>• Microsoft Excel</p>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3 class="text-xl font-semibold mb-3">Research & Analysis</h3>
+                    <div class="space-y-2 text-sm text-gray-400">
+                        <p>• Online Research</p>
+                        <p>• Market Analysis</p>
+                        <p>• Report Generation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 px-6">
+        <div class="container mx-auto text-center">
+            <h2 class="section-title mb-8">LET'S WORK TOGETHER</h2>
+            <p class="text-xl mb-8 text-gray-400 max-w-2xl mx-auto">
+                If you're in need of my services, please contact me on Fiverr
+            </p>
+            <a href="https://www.fiverr.com/neaz222" target="_blank" class="btn-primary">
+                Contact on Fiverr
+            </a>
+            
+            <div class="mt-12 text-gray-500">
+                <p>© 2024 by Engr. Neaz Md. Morshed</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Skill bar animation on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+        
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.width = entry.target.getAttribute('data-width') || entry.target.style.width;
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.skill-progress').forEach(bar => {
+            observer.observe(bar);
+        });
+    </script>
 </body>
 </html>
