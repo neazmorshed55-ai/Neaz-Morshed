@@ -69,7 +69,7 @@ export default function SkillsPage() {
 
       {/* Hero Section - Skill Showcase */}
       <section className="pt-32 pb-20 relative overflow-hidden">
-        <VideoBackground type="skills" opacity={0.12} />
+        <VideoBackground type="skills" opacity={0.4} />
 
         {/* Additional decorative elements */}
         <div className="absolute top-[20%] left-[10%] w-[400px] h-[400px] bg-[#2ecc71]/5 rounded-full blur-[150px] pointer-events-none"></div>

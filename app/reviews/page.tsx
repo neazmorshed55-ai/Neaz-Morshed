@@ -166,7 +166,7 @@ export default function ReviewsPage() {
       <main className="pt-32 pb-24">
         {/* Hero Section */}
         <section className="container mx-auto px-6 max-w-7xl mb-16 relative">
-          <VideoBackground type="reviews" opacity={0.1} />
+          <VideoBackground type="reviews" opacity={0.4} />
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}

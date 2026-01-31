@@ -16,9 +16,9 @@ const videoSources: Record<string, string> = {
   contact: 'https://videos.pexels.com/video-files/852388/852388-hd_1920_1080_30fps.mp4', // Globe/connection theme
 };
 
-export default function VideoBackground({ type, opacity = 0.15 }: VideoBackgroundProps) {
+export default function VideoBackground({ type, opacity = 0.3 }: VideoBackgroundProps) {
   return (
-    <div className="absolute inset-0 overflow-hidden -z-10">
+    <div className="absolute inset-0 overflow-hidden z-0">
       {/* Video element */}
       <video
         autoPlay
@@ -31,12 +31,12 @@ export default function VideoBackground({ type, opacity = 0.15 }: VideoBackgroun
         <source src={videoSources[type]} type="video/mp4" />
       </video>
 
-      {/* Gradient overlays for smooth blending */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0b0f1a] via-[#0b0f1a]/70 to-[#0b0f1a]" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0b0f1a]/80 via-transparent to-[#0b0f1a]/80" />
+      {/* Lighter gradient overlays - more transparent to show video */}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0b0f1a]/60 via-transparent to-[#0b0f1a]/60" />
+      <div className="absolute inset-0 bg-gradient-to-r from-[#0b0f1a]/40 via-transparent to-[#0b0f1a]/40" />
 
       {/* Subtle color tint */}
-      <div className="absolute inset-0 bg-[#2ecc71]/5" />
+      <div className="absolute inset-0 bg-[#2ecc71]/3" />
     </div>
   );
 }
