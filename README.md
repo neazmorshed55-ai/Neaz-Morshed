@@ -1,20 +1,34 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Neaz Md. Morshed Portfolio
 
-# Run and deploy your AI Studio app
+Professional Virtual Assistant & Outsourcing Expert Portfolio built with Next.js, Tailwind CSS, and Framer Motion.
 
-This contains everything you need to run your app locally.
+## Supabase Database Setup
 
-View your app in AI Studio: https://ai.studio/apps/drive/1aXHcWX5LgOO_qZ6OD_ERRoIOCIKnUDN4
+To enable the contact form on your live site, you must create the necessary table in your Supabase project:
 
-## Run Locally
+1.  Log in to your [Supabase Dashboard](https://app.supabase.com/).
+2.  Select your project (e.g., `neaz-morshed`).
+3.  In the left-hand sidebar, click on **SQL Editor**.
+4.  Click **New Query**.
+5.  Open the `supabase_setup.sql` file located in the root of this repository.
+6.  Copy the entire content of that file.
+7.  Paste it into the Supabase SQL Editor.
+8.  Click **Run**.
 
-**Prerequisites:**  Node.js
+This will automatically:
+- Create the `contacts` table.
+- Configure Row Level Security (RLS) to allow public form submissions.
+- Restrict viewing of messages to authenticated administrative users.
 
+## Environment Variables
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+Ensure the following variables are set in your Vercel project settings:
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+## Tech Stack
+- **Framework:** Next.js (App Router)
+- **Styling:** Tailwind CSS
+- **Animations:** Framer Motion
+- **Database/Auth:** Supabase
+- **Icons:** Lucide React

@@ -8,7 +8,7 @@ import {
   Database, Search, ShieldCheck,
   Award, Users, Clock, 
   Zap, Globe, CheckCircle2, Video, 
-  Palette, Layout, PenTool,
+  Layout, PenTool,
   TrendingUp, Star, Send, Loader2
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
@@ -30,6 +30,19 @@ export default function PortfolioPage() {
     setFormStatus('loading');
 
     try {
+      // Input validation
+      if (!formData.name || !formData.email || !formData.message) {
+        throw new Error('All fields are required.');
+      }
+
+      // Safe check for Supabase initialization
+      if (!supabase) {
+        console.error('Supabase client is null. Check environment variables.');
+        setFormStatus('error');
+        alert('Form submission is currently unavailable (Database connection error). Please contact hello@neaz.pro directly.');
+        return;
+      }
+
       const { error } = await supabase
         .from('contacts')
         .insert([
@@ -37,7 +50,7 @@ export default function PortfolioPage() {
             name: formData.name, 
             email: formData.email, 
             message: formData.message,
-            created_at: new Date().toISOString()
+            status: 'new' 
           }
         ]);
 
