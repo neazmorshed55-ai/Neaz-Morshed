@@ -19,6 +19,20 @@ export default function PortfolioPage() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [profileImage, setProfileImage] = useState('https://images.unsplash.com/photo-1519085195758-2a89f9c3f732?auto=format&fit=crop&q=80&w=800');
+
+  // Fetch profile image from Supabase Storage
+  useEffect(() => {
+    if (supabase) {
+      const { data } = supabase.storage.from('images').getPublicUrl('profile.jpg');
+      if (data?.publicUrl) {
+        // Check if the image exists by attempting to load it
+        const img = new Image();
+        img.onload = () => setProfileImage(data.publicUrl);
+        img.src = data.publicUrl;
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -276,9 +290,9 @@ export default function PortfolioPage() {
 
             <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative group">
               <div className="relative z-10 w-full aspect-[4/5] rounded-[5rem] overflow-hidden border-[16px] border-white/5 shadow-2xl bg-slate-900">
-                <img 
-                  src="https://images.unsplash.com/photo-1519085195758-2a89f9c3f732?auto=format&fit=crop&q=80&w=800" 
-                  alt="Neaz Md. Morshed Portfolio" 
+                <img
+                  src={profileImage}
+                  alt="Neaz Md. Morshed Portfolio"
                   className="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f1a] via-transparent to-transparent opacity-60"></div>
