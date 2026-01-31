@@ -174,17 +174,25 @@ export default function PortfolioManagement() {
 
     try {
       if (editingItem) {
-        const { error } = await supabase.from('portfolio_items').update(itemData).eq('id', editingItem.id);
-        if (error) throw error;
+        const { data, error } = await supabase.from('portfolio_items').update(itemData).eq('id', editingItem.id).select();
+        if (error) {
+          console.error('Update error:', error);
+          throw error;
+        }
+        console.log('Updated successfully:', data);
       } else {
-        const { error } = await supabase.from('portfolio_items').insert(itemData);
-        if (error) throw error;
+        const { data, error } = await supabase.from('portfolio_items').insert(itemData).select();
+        if (error) {
+          console.error('Insert error:', error);
+          throw error;
+        }
+        console.log('Inserted successfully:', data);
       }
       await fetchData();
       handleCloseModal();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error saving portfolio item:', error);
-      alert('Error saving portfolio item. Please try again.');
+      alert(`Error saving portfolio item: ${error?.message || 'Unknown error'}. Check console for details.`);
     }
     setSaving(false);
   };
