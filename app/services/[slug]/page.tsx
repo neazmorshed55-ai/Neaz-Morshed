@@ -39,6 +39,14 @@ interface PortfolioItem {
   order_index: number;
 }
 
+interface GalleryItem {
+  id: string;
+  portfolio_item_id: string;
+  url: string;
+  type: 'image' | 'video';
+  order_index: number;
+}
+
 // Default services data
 const defaultServices: { [key: string]: Service } = {
   'video-production': {
@@ -887,6 +895,27 @@ export default function PortfolioCollectionPage() {
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedItem, setSelectedItem] = useState<PortfolioItem | null>(null);
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+
+  useEffect(() => {
+    async function fetchGallery() {
+      if (selectedItem && supabase) {
+        const { data } = await supabase
+          .from('portfolio_gallery')
+          .select('*')
+          .eq('portfolio_item_id', selectedItem.id)
+          .order('order_index', { ascending: true });
+
+        if (data) {
+          setGalleryItems(data as GalleryItem[]);
+        }
+      } else {
+        setGalleryItems([]);
+      }
+    }
+
+    fetchGallery();
+  }, [selectedItem]);
 
   useEffect(() => {
     async function fetchData() {
@@ -1264,6 +1293,35 @@ export default function PortfolioCollectionPage() {
                   <p className="text-slate-400 leading-relaxed mb-8">
                     {selectedItem.description}
                   </p>
+                )}
+
+                {/* Gallery Section */}
+                {galleryItems.length > 0 && (
+                  <div className="mb-8">
+                    <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-4 block">Project Gallery</span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {galleryItems.map((item) => (
+                        <div key={item.id} className="rounded-2xl overflow-hidden border border-white/10 bg-black/50">
+                          {item.type === 'video' ? (
+                            <div className="aspect-video relative">
+                              <iframe
+                                src={item.url}
+                                className="w-full h-full"
+                                allowFullScreen
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                              />
+                            </div>
+                          ) : (
+                            <img
+                              src={item.url}
+                              alt="Gallery item"
+                              className="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
+                            />
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 )}
 
                 {/* Tools Used */}

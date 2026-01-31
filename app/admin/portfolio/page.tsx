@@ -34,6 +34,14 @@ interface Service {
   slug: string;
 }
 
+interface GalleryItem {
+  id: string;
+  portfolio_item_id: string;
+  url: string;
+  type: 'image' | 'video';
+  order_index: number;
+}
+
 export default function PortfolioManagement() {
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
   const [services, setServices] = useState<Service[]>([]);
@@ -45,6 +53,9 @@ export default function PortfolioManagement() {
   const [saving, setSaving] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [uploadingThumbnail, setUploadingThumbnail] = useState(false);
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
+  const [newGalleryItem, setNewGalleryItem] = useState({ url: '', type: 'image' as 'image' | 'video' });
+  const [addingGalleryItem, setAddingGalleryItem] = useState(false);
 
   const [formData, setFormData] = useState({
     service_id: '',
@@ -102,6 +113,7 @@ export default function PortfolioManagement() {
   const handleOpenModal = (item?: PortfolioItem) => {
     if (item) {
       setEditingItem(item);
+      fetchGalleryItems(item.id);
       setFormData({
         service_id: item.service_id,
         title: item.title,
@@ -120,6 +132,7 @@ export default function PortfolioManagement() {
       });
     } else {
       setEditingItem(null);
+      setGalleryItems([]);
       setFormData({
         service_id: services[0]?.id || '',
         title: '',
@@ -236,6 +249,65 @@ export default function PortfolioManagement() {
       alert('Error uploading thumbnail. Please try again.');
     }
     setUploadingThumbnail(false);
+  };
+
+  const fetchGalleryItems = async (portfolioId: string) => {
+    if (!supabase) return;
+    const { data, error } = await supabase
+      .from('portfolio_gallery')
+      .select('*')
+      .eq('portfolio_item_id', portfolioId)
+      .order('order_index', { ascending: true });
+
+    if (error) {
+      console.error('Error fetching gallery items:', error);
+    } else if (data) {
+      setGalleryItems(data as GalleryItem[]);
+    }
+  };
+
+  const handleAddGalleryItem = async () => {
+    if (!supabase || !editingItem || !newGalleryItem.url) return;
+
+    setAddingGalleryItem(true);
+    try {
+      const { data, error } = await supabase
+        .from('portfolio_gallery')
+        .insert({
+          portfolio_item_id: editingItem.id,
+          url: newGalleryItem.url,
+          type: newGalleryItem.type,
+          order_index: galleryItems.length
+        })
+        .select()
+        .single();
+
+      if (error) throw error;
+      if (data) {
+        setGalleryItems([...galleryItems, data as GalleryItem]);
+        setNewGalleryItem({ url: '', type: 'image' });
+      }
+    } catch (error) {
+      console.error('Error adding gallery item:', error);
+      alert('Error adding gallery item');
+    }
+    setAddingGalleryItem(false);
+  };
+
+  const handleDeleteGalleryItem = async (id: string) => {
+    if (!supabase) return;
+    try {
+      const { error } = await supabase
+        .from('portfolio_gallery')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      setGalleryItems(galleryItems.filter(item => item.id !== id));
+    } catch (error) {
+      console.error('Error deleting gallery item:', error);
+      alert('Error deleting gallery item');
+    }
   };
 
   return (
@@ -504,6 +576,17 @@ export default function PortfolioManagement() {
                     </div>
 
                     <div>
+                      <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Project Detail Image (Optional)</label>
+                      <input
+                        type="text"
+                        value={formData.image_url}
+                        onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
+                        className="w-full bg-slate-800/50 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-[#2ecc71]/50 mb-2"
+                        placeholder="Image URL..."
+                      />
+                    </div>
+
+                    <div>
                       <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Project URL</label>
                       <input
                         type="text"
@@ -536,6 +619,71 @@ export default function PortfolioManagement() {
                       />
                     </div>
                   </div>
+
+                  {/* Gallery Management Section - Only show when editing an existing item */}
+                  {editingItem && (
+                    <div className="border-t border-white/10 pt-6 mt-6">
+                      <h3 className="text-white font-bold mb-4 flex items-center gap-2">
+                        <Image size={18} className="text-[#2ecc71]" />
+                        Gallery Images & Videos
+                      </h3>
+
+                      {/* Add New Gallery Item */}
+                      <div className="flex gap-3 mb-6">
+                        <select
+                          value={newGalleryItem.type}
+                          onChange={(e) => setNewGalleryItem({ ...newGalleryItem, type: e.target.value as 'image' | 'video' })}
+                          className="bg-slate-800/50 border border-white/10 rounded-xl px-4 text-white focus:outline-none focus:border-[#2ecc71]/50"
+                        >
+                          <option value="image">Image</option>
+                          <option value="video">Video</option>
+                        </select>
+                        <input
+                          type="text"
+                          value={newGalleryItem.url}
+                          onChange={(e) => setNewGalleryItem({ ...newGalleryItem, url: e.target.value })}
+                          className="flex-1 bg-slate-800/50 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-[#2ecc71]/50"
+                          placeholder={newGalleryItem.type === 'image' ? "Image URL..." : "Video URL (YouTube/Vimeo)..."}
+                        />
+                        <button
+                          type="button"
+                          onClick={handleAddGalleryItem}
+                          disabled={addingGalleryItem || !newGalleryItem.url}
+                          className="bg-[#2ecc71] text-slate-950 px-4 rounded-xl font-bold hover:bg-[#27ae60] disabled:opacity-50"
+                        >
+                          {addingGalleryItem ? <Loader2 size={18} className="animate-spin" /> : <Plus size={18} />}
+                        </button>
+                      </div>
+
+                      {/* Gallery Grid */}
+                      {galleryItems.length > 0 ? (
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                          {galleryItems.map((item) => (
+                            <div key={item.id} className="relative group aspect-video bg-slate-800 rounded-lg overflow-hidden border border-white/10">
+                              {item.type === 'image' ? (
+                                <img src={item.url} alt="Gallery item" className="w-full h-full object-cover" />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-slate-900">
+                                  <div className="text-slate-500 flex flex-col items-center">
+                                    <span className="text-xs">Video</span>
+                                  </div>
+                                </div>
+                              )}
+                              <button
+                                type="button"
+                                onClick={() => handleDeleteGalleryItem(item.id)}
+                                className="absolute top-2 right-2 p-1.5 bg-red-500 text-white rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                              >
+                                <Trash2 size={14} />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-slate-500 text-sm italic">No gallery items added yet.</p>
+                      )}
+                    </div>
+                  )}
 
                   <div className="flex items-center gap-3">
                     <input
