@@ -28,9 +28,9 @@ export default function PortfolioPage() {
   const title = "Expert Virtual Assistant & Professional Outsourcer";
 
   const stats = [
-    { label: 'Job Success', value: '100%', icon: <Star className="w-5 h-5" /> },
-    { label: 'Global Clients', value: '180+', icon: <Users className="w-5 h-5" /> },
-    { label: 'Hours Completed', value: '5,000+', icon: <Clock className="w-5 h-5" /> },
+    { label: 'Job Success', value: '100%', icon: <Star className="w-5 h-5 text-[#2ecc71]" /> },
+    { label: 'Global Clients', value: '180+', icon: <Users className="w-5 h-5 text-[#2ecc71]" /> },
+    { label: 'Hours Completed', value: '5,000+', icon: <Clock className="w-5 h-5 text-[#2ecc71]" /> },
   ];
 
   const services = [
@@ -66,6 +66,15 @@ export default function PortfolioPage() {
     { label: 'Content Operations', years: '5+ Years', icon: <PenTool size={18} /> },
   ];
 
+  const skills = [
+    { name: 'Lead Research', level: 98 },
+    { name: 'CRM Management', level: 95 },
+    { name: 'Data Mining', level: 97 },
+    { name: 'Admin Support', level: 99 },
+    { name: 'Video Production', level: 95 },
+    { name: 'Web Development', level: 92 }
+  ];
+
   return (
     <div className="bg-[#0b0f1a] text-white">
       {/* Navigation */}
@@ -80,7 +89,7 @@ export default function PortfolioPage() {
           </div>
           
           <div className="hidden lg:flex items-center gap-10">
-            {['Home', 'Services', 'Experience', 'Contact'].map(link => (
+            {['Home', 'Skills', 'Services', 'Contact'].map(link => (
               <a key={link} href={`#${link.toLowerCase()}`} className="text-[11px] font-bold tracking-[0.3em] text-slate-400 hover:text-[#2ecc71] transition-all uppercase">
                 {link}
               </a>
@@ -105,7 +114,7 @@ export default function PortfolioPage() {
             <button className="absolute top-8 right-8 text-[#2ecc71]" onClick={() => setIsMobileMenuOpen(false)}>
               <X size={40} />
             </button>
-            {['Home', 'Services', 'Experience', 'Contact'].map(link => (
+            {['Home', 'Skills', 'Services', 'Contact'].map(link => (
               <a key={link} href={`#${link.toLowerCase()}`} onClick={() => setIsMobileMenuOpen(false)} className="text-5xl font-black text-white hover:text-[#2ecc71] transition-colors uppercase tracking-tighter">{link}</a>
             ))}
           </motion.div>
@@ -115,21 +124,21 @@ export default function PortfolioPage() {
       <main>
         {/* Hero */}
         <section id="home" className="relative min-h-screen flex items-center pt-24 overflow-hidden">
-          <div className="absolute top-[10%] left-[5%] w-[600px] h-[600px] bg-[#2ecc71]/5 rounded-full blur-[180px] pointer-events-none animate-pulse"></div>
+          <div className="absolute top-[10%] left-[5%] w-[600px] h-[600px] bg-[#2ecc71]/5 rounded-full blur-[180px] pointer-events-none animate-subtle-pulse"></div>
           
           <div className="container mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-16 items-center max-w-7xl relative z-10">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#2ecc71]/10 border border-[#2ecc71]/20 text-[#2ecc71] text-[10px] font-black uppercase tracking-[0.3em] mb-10">
                 <TrendingUp size={14} className="text-[#2ecc71]" />
-                Powering Global Business Growth
+                Powering Global Business Growth Since 2014
               </div>
               <h1 className="text-7xl lg:text-[100px] font-black leading-[0.85] mb-12 tracking-tighter">
-                OPTIMIZE <br />
-                <span className="text-gradient">OPERATIONS</span> <br />
-                FOR <span className="text-[#2ecc71]">SCALE</span>
+                I AM <br />
+                <span className="text-gradient">NEAZ MD.</span> <br />
+                <span className="text-gradient">MORSHED</span>
               </h1>
               <p className="text-xl text-slate-400 mb-14 max-w-lg leading-relaxed font-medium">
-                Professional <span className="text-white font-bold">{title}</span>. I handle the complexity so you can focus on high-level strategy and vision.
+                Professional <span className="text-white font-bold">{title}</span>. I bridge the gap between complexity and clarity, ensuring your business runs like clockwork.
               </p>
               <div className="flex flex-wrap gap-6 items-center">
                 <a href="#contact" className="bg-[#2ecc71] text-slate-950 px-14 py-6 rounded-2xl font-black flex items-center justify-center gap-3 hover:scale-105 active:scale-95 transition-all shadow-[0_20px_50px_rgba(46,204,113,0.3)] uppercase tracking-widest text-sm">
@@ -150,7 +159,7 @@ export default function PortfolioPage() {
               <div className="relative z-10 w-full aspect-[4/5] rounded-[5rem] overflow-hidden border-[16px] border-white/5 shadow-2xl bg-slate-900">
                 <img 
                   src="https://images.unsplash.com/photo-1519085195758-2a89f9c3f732?auto=format&fit=crop&q=80&w=800" 
-                  alt="Neaz Md. Morshed" 
+                  alt="Neaz Md. Morshed Portrait" 
                   className="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:scale-110 transition-all duration-1000"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f1a] via-transparent to-transparent opacity-60"></div>
@@ -162,8 +171,50 @@ export default function PortfolioPage() {
                   </div>
                 </div>
               </div>
-              <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-[#2ecc71]/20 rounded-full blur-3xl -z-10 animate-pulse"></div>
+              <div className="absolute -bottom-10 -right-10 w-48 h-48 bg-[#2ecc71]/20 rounded-full blur-3xl -z-10 animate-subtle-pulse"></div>
             </motion.div>
+          </div>
+        </section>
+
+        {/* Skills Section */}
+        <section id="skills" className="py-32 bg-slate-900/10">
+          <div className="container mx-auto px-6 max-w-7xl">
+             <div className="text-center mb-24">
+              <span className="text-[#2ecc71] text-[11px] font-black uppercase tracking-[0.5em] mb-6 block">Expertise</span>
+              <h2 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-none">Technical <br /><span className="text-slate-600">Competence</span></h2>
+            </div>
+            <div className="grid lg:grid-cols-2 gap-20 items-center">
+              <div className="space-y-10">
+                {skills.map(skill => (
+                  <div key={skill.name}>
+                    <div className="flex justify-between mb-4">
+                      <span className="text-[11px] font-extrabold uppercase tracking-[0.2em] text-slate-400">{skill.name}</span>
+                      <span className="text-[#2ecc71] font-black">{skill.level}%</span>
+                    </div>
+                    <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
+                      <motion.div 
+                        initial={{ width: 0 }} 
+                        whileInView={{ width: `${skill.level}%` }} 
+                        transition={{ duration: 1.5, ease: "circOut" }} 
+                        className="h-full bg-[#2ecc71] rounded-full shadow-[0_0_20px_rgba(46,204,113,0.5)]"
+                      ></motion.div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="grid grid-cols-2 gap-8">
+                <div className="p-12 bg-[#2ecc71] rounded-[4rem] text-slate-950 flex flex-col justify-center items-center text-center aspect-square shadow-2xl">
+                  <TrendingUp className="w-12 h-12 mb-4" />
+                  <div className="text-5xl font-black mb-1">98%</div>
+                  <div className="text-[10px] font-black uppercase tracking-widest opacity-80">Accuracy</div>
+                </div>
+                <div className="p-12 bg-white/5 border border-white/10 rounded-[4rem] flex flex-col justify-center items-center text-center aspect-square">
+                  <Star className="text-[#2ecc71] w-12 h-12 mb-4" />
+                  <div className="text-4xl font-black mb-1">Top Rated</div>
+                  <div className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Global Status</div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -172,11 +223,11 @@ export default function PortfolioPage() {
           <div className="container mx-auto px-6 max-w-7xl">
             <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-12">
               <div className="max-w-3xl">
-                <span className="text-[#2ecc71] text-[11px] font-black uppercase tracking-[0.5em] mb-6 block">Capabilities</span>
-                <h2 className="text-6xl lg:text-8xl font-black uppercase tracking-tighter leading-none">Strategic <br /> <span className="text-slate-600">Business Support</span></h2>
+                <span className="text-[#2ecc71] text-[11px] font-black uppercase tracking-[0.5em] mb-6 block">Our Solutions</span>
+                <h2 className="text-6xl lg:text-8xl font-black uppercase tracking-tighter leading-none">High-Impact <br /> <span className="text-slate-600">Business Services</span></h2>
               </div>
               <p className="text-slate-400 max-w-sm text-sm leading-relaxed mb-6 font-medium">
-                Delivering high-impact assistance designed for the modern remote landscape. Built for reliability and performance.
+                Streamlining operations and driving growth through precision-engineered digital workflows.
               </p>
             </div>
             
@@ -199,13 +250,13 @@ export default function PortfolioPage() {
           </div>
         </section>
 
-        {/* Experience / Other Skills */}
+        {/* Experience Section */}
         <section id="experience" className="py-32 bg-slate-900/10">
           <div className="container mx-auto px-6 max-w-7xl">
             <div className="grid lg:grid-cols-2 gap-20 items-center">
               <div>
                 <span className="text-[#2ecc71] text-[11px] font-black uppercase tracking-[0.5em] mb-8 block">Legacy</span>
-                <h2 className="text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-none mb-12">Years of <br /><span className="text-slate-600">Trust & Reliability</span></h2>
+                <h2 className="text-6xl lg:text-7xl font-black uppercase tracking-tighter leading-none mb-12">Proven <br /><span className="text-slate-600">Industry Tenure</span></h2>
                 <div className="space-y-6">
                   {technicalExperience.map((exp, i) => (
                     <div key={i} className="flex items-center justify-between p-8 bg-slate-900 border border-white/5 rounded-3xl hover:border-[#2ecc71]/30 transition-all">
@@ -220,30 +271,33 @@ export default function PortfolioPage() {
                   ))}
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-6">
-                <div className="space-y-6 mt-12">
-                   <div className="p-10 bg-[#2ecc71] rounded-[4rem] text-slate-950 flex flex-col justify-center items-center text-center aspect-square shadow-2xl">
-                      <Star className="w-12 h-12 mb-4" />
-                      <div className="text-4xl font-black mb-1">5.0</div>
-                      <div className="text-[9px] font-black uppercase tracking-[0.2em] opacity-80">Marketplace Rating</div>
-                   </div>
-                   <div className="p-10 bg-slate-900 border border-white/5 rounded-[4rem] flex flex-col justify-center items-center text-center aspect-square">
-                      <Globe className="text-[#2ecc71] w-12 h-12 mb-4" />
-                      <div className="text-3xl font-black mb-1">Global</div>
-                      <div className="text-[9px] text-slate-500 font-bold uppercase tracking-[0.2em]">Remote Presence</div>
-                   </div>
-                </div>
-                <div className="space-y-6">
-                  <div className="p-10 bg-slate-900 border border-white/5 rounded-[4rem] flex flex-col justify-center items-center text-center aspect-square">
-                      <Zap className="text-[#2ecc71] w-12 h-12 mb-4" />
-                      <div className="text-3xl font-black mb-1">Fast</div>
-                      <div className="text-[9px] text-slate-500 font-bold uppercase tracking-[0.2em]">Response Time</div>
-                   </div>
-                   <div className="p-10 bg-[#2ecc71]/10 border border-[#2ecc71]/20 rounded-[4rem] flex flex-col justify-center items-center text-center aspect-square">
-                      <CheckCircle2 className="text-white w-12 h-12 mb-4" />
-                      <div className="text-3xl font-black mb-1">Proven</div>
-                      <div className="text-[9px] text-slate-400 font-bold uppercase tracking-[0.2em]">Track Record</div>
-                   </div>
+              <div className="bg-slate-900/50 p-12 rounded-[5rem] border border-white/5">
+                <h3 className="text-3xl font-black uppercase tracking-tighter mb-8">Selected Engagements</h3>
+                <div className="space-y-8">
+                  <div className="flex gap-6">
+                    <div className="w-1 bg-[#2ecc71] rounded-full"></div>
+                    <div>
+                      <div className="text-[#2ecc71] font-black uppercase tracking-widest text-[10px] mb-1">Aura Relax (2021-Present)</div>
+                      <h4 className="text-xl font-bold uppercase mb-2">YouTube Manager</h4>
+                      <p className="text-slate-400 text-sm">Managing relaxing content operations and audience growth.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-6">
+                    <div className="w-1 bg-slate-800 rounded-full"></div>
+                    <div>
+                      <div className="text-slate-500 font-black uppercase tracking-widest text-[10px] mb-1">Release Media Inc. (2022-Present)</div>
+                      <h4 className="text-xl font-bold uppercase mb-2">Virtual Assistant</h4>
+                      <p className="text-slate-400 text-sm">Strategic administrative and content operations lead.</p>
+                    </div>
+                  </div>
+                  <div className="flex gap-6">
+                    <div className="w-1 bg-slate-800 rounded-full"></div>
+                    <div>
+                      <div className="text-slate-500 font-black uppercase tracking-widest text-[10px] mb-1">GLOCAL (2021-2022)</div>
+                      <h4 className="text-xl font-bold uppercase mb-2">Web Design Coordinator</h4>
+                      <p className="text-slate-400 text-sm">Orchestrating digital infrastructure for anthropological linguistics.</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -254,21 +308,21 @@ export default function PortfolioPage() {
         <section id="contact" className="py-32 bg-[#0b0f1a]">
           <div className="container mx-auto px-6 max-w-5xl">
             <div className="bg-[#0e1526] rounded-[6rem] p-16 lg:p-28 border border-white/10 relative overflow-hidden text-center shadow-2xl">
-              <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#2ecc71]/10 rounded-full blur-[200px] -z-10"></div>
+              <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#2ecc71]/10 rounded-full blur-[200px] -z-10 animate-subtle-pulse"></div>
               
-              <span className="text-[#2ecc71] text-[11px] font-black uppercase tracking-[0.5em] mb-12 block">Final Step</span>
-              <h2 className="text-7xl lg:text-[120px] font-black mb-20 uppercase leading-[0.8] tracking-tighter">Let's Build <br /> <span className="text-slate-600">Something</span></h2>
+              <span className="text-[#2ecc71] text-[11px] font-black uppercase tracking-[0.5em] mb-12 block">Connect</span>
+              <h2 className="text-7xl lg:text-[120px] font-black mb-20 uppercase leading-[0.8] tracking-tighter">Start Your <br /> <span className="text-slate-600">Project</span></h2>
               
               <div className="grid md:grid-cols-2 gap-10 mt-28 mb-24 text-left">
                 <div className="p-12 rounded-[4.5rem] bg-white/5 border border-white/10 hover:border-[#2ecc71]/40 transition-all group">
                   <Mail className="text-[#2ecc71] mb-10" size={64} />
-                  <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-4">Email</div>
+                  <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-4">Official Email</div>
                   <div className="text-2xl font-black text-white hover:text-[#2ecc71] transition-colors break-all">hello@neaz.pro</div>
                 </div>
                 <div className="p-12 rounded-[4.5rem] bg-white/5 border border-white/10 hover:border-[#2ecc71]/40 transition-all group">
                   <MessageSquare className="text-[#2ecc71] mb-10" size={64} />
-                  <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-4">Direct Message</div>
-                  <div className="text-2xl font-black text-white hover:text-[#2ecc71] transition-colors">via Fiverr / LinkedIn</div>
+                  <div className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-4">Marketplace</div>
+                  <div className="text-2xl font-black text-white hover:text-[#2ecc71] transition-colors">Fiverr / LinkedIn</div>
                 </div>
               </div>
 
@@ -277,8 +331,8 @@ export default function PortfolioPage() {
               </a>
               
               <div className="mt-24 flex justify-center gap-14">
-                <a href="#" className="text-slate-500 hover:text-[#2ecc71] transition-all transform hover:scale-125"><Linkedin size={40} /></a>
-                <a href="#" className="text-slate-500 hover:text-[#2ecc71] transition-all transform hover:scale-125"><Github size={40} /></a>
+                <a href="https://www.linkedin.com" target="_blank" className="text-slate-500 hover:text-[#2ecc71] transition-all transform hover:scale-125"><Linkedin size={40} /></a>
+                <a href="https://github.com" target="_blank" className="text-slate-500 hover:text-[#2ecc71] transition-all transform hover:scale-125"><Github size={40} /></a>
                 <a href="#" className="text-slate-500 hover:text-[#2ecc71] transition-all transform hover:scale-125"><Globe size={40} /></a>
               </div>
             </div>
@@ -297,21 +351,6 @@ export default function PortfolioPage() {
           </p>
         </div>
       </footer>
-
-      <style jsx global>{`
-        .text-gradient {
-          background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-        @keyframes subtle-pulse {
-          0%, 100% { opacity: 0.05; transform: scale(1); }
-          50% { opacity: 0.15; transform: scale(1.05); }
-        }
-        .animate-pulse {
-          animation: subtle-pulse 8s infinite ease-in-out;
-        }
-      `}</style>
     </div>
   );
 }

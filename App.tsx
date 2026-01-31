@@ -1,7 +1,2 @@
-
-/**
- * DEPRECATED: Logic moved to app/page.tsx for Next.js consistency.
- */
-export default function App() {
-  return null;
-}
+// Deprecated: Project logic moved to app/page.tsx.
+export default function App() { return null; }
