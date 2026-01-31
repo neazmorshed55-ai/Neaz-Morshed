@@ -1104,6 +1104,7 @@ export default function PortfolioCollectionPage() {
                           src={item.thumbnail_url || item.image_url || ''}
                           alt={item.title}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                          loading="lazy"
                         />
                       ) : (
                         <div className="w-full h-full bg-slate-800 flex items-center justify-center">
@@ -1247,6 +1248,7 @@ export default function PortfolioCollectionPage() {
                       className="w-full h-full object-cover"
                       controls
                       playsInline
+                      preload="none"
                     />
                   ) : (
                     <iframe
@@ -1254,6 +1256,7 @@ export default function PortfolioCollectionPage() {
                       className="w-full h-full"
                       allowFullScreen
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      loading="lazy"
                     />
                   )}
                 </div>
@@ -1263,6 +1266,7 @@ export default function PortfolioCollectionPage() {
                     src={selectedItem.image_url || selectedItem.thumbnail_url || ''}
                     alt={selectedItem.title}
                     className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                 </div>
               )}
@@ -1323,6 +1327,7 @@ export default function PortfolioCollectionPage() {
                                   className="w-full h-full object-cover"
                                   controls
                                   playsInline
+                                  preload="none"
                                 />
                               ) : (
                                 <iframe
@@ -1330,6 +1335,7 @@ export default function PortfolioCollectionPage() {
                                   className="w-full h-full"
                                   allowFullScreen
                                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                  loading="lazy"
                                 />
                               )}
                             </div>
@@ -1338,6 +1344,7 @@ export default function PortfolioCollectionPage() {
                               src={item.url}
                               alt="Gallery item"
                               className="w-full h-auto object-cover hover:scale-105 transition-transform duration-500"
+                              loading="lazy"
                             />
                           )}
                         </div>

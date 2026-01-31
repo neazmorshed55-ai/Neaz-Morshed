@@ -560,7 +560,7 @@ export default function ExperiencePage() {
       <main className="pb-24">
         {/* Hero Section */}
         <section className="pt-32 pb-16 relative overflow-hidden min-h-[55vh] flex flex-col justify-center">
-          <VideoBackground type="experience" opacity={0.5} />
+          <VideoBackground type="experience" opacity={0.8} />
 
           {/* Additional decorative elements */}
           <div className="absolute top-[20%] left-[10%] w-[400px] h-[400px] bg-[#2ecc71]/5 rounded-full blur-[150px] pointer-events-none"></div>
