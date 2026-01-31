@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
   Plus, Edit2, Trash2, Search, Loader2, X,
-  MessageSquare, ArrowLeft, Save, Star, User
+  MessageSquare, ArrowLeft, Save, Star, User, Upload, Image as ImageIcon
 } from 'lucide-react';
 import ProtectedRoute from '../../../components/admin/ProtectedRoute';
 import { supabase } from '../../../lib/supabase';
@@ -32,6 +32,7 @@ export default function ReviewsManagement() {
   const [editingReview, setEditingReview] = useState<Review | null>(null);
   const [saving, setSaving] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const [formData, setFormData] = useState({
     client_name: '',
@@ -171,6 +172,31 @@ export default function ReviewsManagement() {
 
   const platformOptions = ['Fiverr', 'Upwork', 'LinkedIn', 'Google', 'Direct', 'Other'];
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !supabase) return;
+
+    setUploadingImage(true);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `client-${Date.now()}.${fileExt}`;
+      const filePath = `reviews/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage.from('images').getPublicUrl(filePath);
+      setFormData({ ...formData, client_image: data.publicUrl });
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Error uploading image. Please try again.');
+    }
+    setUploadingImage(false);
+  };
+
   return (
     <ProtectedRoute>
       <div className="min-h-screen">
@@ -230,9 +256,17 @@ export default function ReviewsManagement() {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <div className="w-10 h-10 bg-[#2ecc71]/10 rounded-full flex items-center justify-center">
-                        <User size={20} className="text-[#2ecc71]" />
-                      </div>
+                      {review.client_image ? (
+                        <img
+                          src={review.client_image}
+                          alt={review.client_name}
+                          className="w-10 h-10 rounded-full object-cover border border-[#2ecc71]/30"
+                        />
+                      ) : (
+                        <div className="w-10 h-10 bg-[#2ecc71]/10 rounded-full flex items-center justify-center">
+                          <User size={20} className="text-[#2ecc71]" />
+                        </div>
+                      )}
                       <div>
                         <h3 className="text-white font-bold">{review.client_name}</h3>
                         <p className="text-slate-500 text-sm">{review.client_title} at {review.client_company}</p>
@@ -303,6 +337,51 @@ export default function ReviewsManagement() {
                 </div>
 
                 <div className="p-6 space-y-5">
+                  {/* Client Image Upload */}
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Client Photo</label>
+                    <div className="flex items-center gap-4">
+                      {formData.client_image ? (
+                        <div className="relative">
+                          <img
+                            src={formData.client_image}
+                            alt="Client"
+                            className="w-20 h-20 rounded-full object-cover border-2 border-[#2ecc71]/30"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setFormData({ ...formData, client_image: '' })}
+                            className="absolute -top-1 -right-1 p-1 bg-red-500 rounded-full text-white hover:bg-red-600 transition-colors"
+                          >
+                            <X size={12} />
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="w-20 h-20 rounded-full bg-slate-800/50 border-2 border-dashed border-white/20 flex items-center justify-center">
+                          <User size={32} className="text-slate-600" />
+                        </div>
+                      )}
+                      <div className="flex-1">
+                        <label className="flex items-center gap-2 px-4 py-2 bg-slate-800/50 border border-white/10 rounded-xl cursor-pointer hover:bg-slate-800 hover:border-[#2ecc71]/30 transition-all">
+                          {uploadingImage ? (
+                            <Loader2 size={18} className="text-[#2ecc71] animate-spin" />
+                          ) : (
+                            <Upload size={18} className="text-[#2ecc71]" />
+                          )}
+                          <span className="text-slate-400 text-sm">{uploadingImage ? 'Uploading...' : 'Upload Photo'}</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            className="hidden"
+                            disabled={uploadingImage}
+                          />
+                        </label>
+                        <p className="text-slate-600 text-xs mt-2">Recommended: Square image, min 200x200px</p>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-2 gap-4">
                     <div className="col-span-2">
                       <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Client Name *</label>

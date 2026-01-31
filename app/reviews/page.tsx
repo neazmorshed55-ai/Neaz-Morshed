@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
   Star, Quote, Linkedin, Facebook,
-  ExternalLink, ThumbsUp, MessageCircle, Users
+  ExternalLink, ThumbsUp, MessageCircle, Users, User
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import Navbar from '../../components/Navbar';
@@ -234,8 +234,23 @@ export default function ReviewsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -30 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="p-8 bg-slate-900/60 border border-white/5 rounded-[2rem] hover:border-[#2ecc71]/30 transition-all group"
+                  className="p-8 bg-slate-900/60 border border-white/5 rounded-[2rem] hover:border-[#2ecc71]/30 transition-all group relative"
                 >
+                  {/* Client Image - Top Right */}
+                  <div className="absolute top-6 right-6">
+                    {review.client_image ? (
+                      <img
+                        src={review.client_image}
+                        alt={review.client_name}
+                        className="w-16 h-16 rounded-full object-cover border-2 border-[#2ecc71]/30 shadow-lg shadow-[#2ecc71]/10 group-hover:border-[#2ecc71]/60 transition-all"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-full bg-slate-800/80 border-2 border-white/10 flex items-center justify-center group-hover:border-[#2ecc71]/30 transition-all">
+                        <User className="w-8 h-8 text-slate-600" />
+                      </div>
+                    )}
+                  </div>
+
                   {/* Quote Icon */}
                   <Quote className="w-10 h-10 text-[#2ecc71]/30 mb-6" />
 
