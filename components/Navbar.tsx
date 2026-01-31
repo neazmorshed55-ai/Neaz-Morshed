@@ -33,7 +33,8 @@ const defaultNavItems: NavItem[] = [
   { id: '4', label: 'Experience', href: '/experience', order_index: 4, is_visible: true, is_button: false, open_in_new_tab: false },
   { id: '5', label: 'Reviews', href: '/reviews', order_index: 5, is_visible: true, is_button: false, open_in_new_tab: false },
   { id: '6', label: 'Contact', href: '/contact', order_index: 6, is_visible: true, is_button: false, open_in_new_tab: false },
-  { id: '7', label: 'Resume', href: '/resume', order_index: 7, is_visible: true, is_button: true, open_in_new_tab: false },
+  { id: '7', label: 'Blog', href: '/blog', order_index: 7, is_visible: true, is_button: false, open_in_new_tab: false },
+  { id: '8', label: 'Resume', href: '/resume', order_index: 8, is_visible: true, is_button: true, open_in_new_tab: false },
 ];
 
 const defaultBranding: SiteBranding = {
@@ -105,11 +106,10 @@ export default function Navbar() {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${
-          isScrolled
+        className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${isScrolled
             ? 'bg-[#0b0f1a]/90 backdrop-blur-2xl border-b border-white/5 py-4'
             : 'bg-transparent py-8'
-        }`}
+          }`}
       >
         <div className="container mx-auto px-6 lg:px-12 flex justify-between items-center max-w-7xl">
           {/* Logo */}
@@ -149,9 +149,8 @@ export default function Navbar() {
                 href={item.href}
                 target={item.open_in_new_tab ? '_blank' : undefined}
                 rel={item.open_in_new_tab ? 'noopener noreferrer' : undefined}
-                className={`text-[11px] font-bold tracking-[0.3em] transition-all uppercase ${
-                  isActive(item.href) ? 'text-[#2ecc71]' : 'text-slate-400 hover:text-[#2ecc71]'
-                }`}
+                className={`text-[11px] font-bold tracking-[0.3em] transition-all uppercase ${isActive(item.href) ? 'text-[#2ecc71]' : 'text-slate-400 hover:text-[#2ecc71]'
+                  }`}
               >
                 {item.label}
               </Link>
@@ -162,11 +161,10 @@ export default function Navbar() {
                 href={item.href}
                 target={item.open_in_new_tab ? '_blank' : undefined}
                 rel={item.open_in_new_tab ? 'noopener noreferrer' : undefined}
-                className={`px-8 py-4 rounded-2xl font-black text-[11px] tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg uppercase ${
-                  isActive(item.href)
+                className={`px-8 py-4 rounded-2xl font-black text-[11px] tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg uppercase ${isActive(item.href)
                     ? 'bg-white text-slate-950 shadow-white/20'
                     : 'bg-[#2ecc71] text-slate-950 shadow-[#2ecc71]/20'
-                }`}
+                  }`}
               >
                 {item.label}
               </Link>
@@ -205,11 +203,10 @@ export default function Navbar() {
                 target={item.open_in_new_tab ? '_blank' : undefined}
                 rel={item.open_in_new_tab ? 'noopener noreferrer' : undefined}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-4xl font-black transition-colors uppercase tracking-tighter ${
-                  isActive(item.href) || item.is_button
+                className={`text-4xl font-black transition-colors uppercase tracking-tighter ${isActive(item.href) || item.is_button
                     ? 'text-[#2ecc71]'
                     : 'text-white hover:text-[#2ecc71]'
-                }`}
+                  }`}
               >
                 {item.label}
               </Link>

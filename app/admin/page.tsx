@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import {
   Briefcase, Award, MessageSquare, Wrench, Star,
-  TrendingUp, ExternalLink, Plus, ArrowRight, Loader2
+  TrendingUp, ExternalLink, Plus, ArrowRight, Loader2, BookOpen
 } from 'lucide-react';
 import ProtectedRoute from '../../components/admin/ProtectedRoute';
 import { supabase } from '../../lib/supabase';
@@ -16,6 +16,7 @@ interface Stats {
   reviews: number;
   skills: number;
   portfolioItems: number;
+  blogs: number;
 }
 
 export default function AdminDashboard() {
@@ -24,7 +25,8 @@ export default function AdminDashboard() {
     experiences: 0,
     reviews: 0,
     skills: 0,
-    portfolioItems: 0
+    portfolioItems: 0,
+    blogs: 0
   });
   const [loading, setLoading] = useState(true);
 
@@ -37,27 +39,31 @@ export default function AdminDashboard() {
           experiences: 29,
           reviews: 15,
           skills: 25,
-          portfolioItems: 44
+          portfolioItems: 44,
+          blogs: 5
         });
         setLoading(false);
         return;
       }
 
       try {
-        const [servicesRes, experiencesRes, reviewsRes, skillsRes, portfolioRes] = await Promise.all([
+        const [servicesRes, experiencesRes, reviewsRes, skillsRes, portfolioRes, blogsRes] = await Promise.all([
           supabase.from('services').select('id', { count: 'exact', head: true }),
           supabase.from('experiences').select('id', { count: 'exact', head: true }),
           supabase.from('reviews').select('id', { count: 'exact', head: true }),
           supabase.from('skills').select('id', { count: 'exact', head: true }),
-          supabase.from('portfolio_items').select('id', { count: 'exact', head: true })
+          supabase.from('portfolio_items').select('id', { count: 'exact', head: true }),
+          supabase.from('blogs').select('id', { count: 'exact', head: true })
         ]);
+
 
         setStats({
           services: servicesRes.count || 7,
           experiences: experiencesRes.count || 29,
           reviews: reviewsRes.count || 15,
           skills: skillsRes.count || 25,
-          portfolioItems: portfolioRes.count || 44
+          portfolioItems: portfolioRes.count || 44,
+          blogs: blogsRes.count || 5
         });
       } catch (error) {
         console.error('Error fetching stats:', error);
@@ -75,6 +81,7 @@ export default function AdminDashboard() {
     { name: 'Reviews', count: stats.reviews, icon: MessageSquare, href: '/admin/reviews', color: '#9b59b6' },
     { name: 'Skills', count: stats.skills, icon: Wrench, href: '/admin/skills', color: '#e74c3c' },
     { name: 'Portfolio Items', count: stats.portfolioItems, icon: Star, href: '/admin/portfolio', color: '#f39c12' },
+    { name: 'Blogs', count: stats.blogs, icon: BookOpen, href: '/admin/blog', color: '#e84393' },
   ];
 
   const quickActions = [
@@ -82,6 +89,7 @@ export default function AdminDashboard() {
     { name: 'Add Experience', href: '/admin/experience/new', icon: Award },
     { name: 'Add Review', href: '/admin/reviews/new', icon: MessageSquare },
     { name: 'Add Skill', href: '/admin/skills/new', icon: Wrench },
+    { name: 'Add Blog Post', href: '/admin/blog', icon: BookOpen },
   ];
 
   return (
