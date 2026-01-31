@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import {
-  ArrowLeft, ArrowRight, ChevronRight, Loader2,
+  ArrowLeft, ArrowRight, ChevronRight, ChevronDown, Loader2,
   Video, Palette, PenTool, BookOpen, Briefcase,
   Share2, Globe
 } from 'lucide-react';
@@ -29,13 +29,13 @@ interface SubSkill {
 }
 
 const iconMap: { [key: string]: React.ReactNode } = {
-  'Video': <Video className="w-6 h-6" />,
-  'Palette': <Palette className="w-6 h-6" />,
-  'PenTool': <PenTool className="w-6 h-6" />,
-  'BookOpen': <BookOpen className="w-6 h-6" />,
-  'Briefcase': <Briefcase className="w-6 h-6" />,
-  'Share2': <Share2 className="w-6 h-6" />,
-  'Globe': <Globe className="w-6 h-6" />,
+  'Video': <Video className="w-5 h-5" />,
+  'Palette': <Palette className="w-5 h-5" />,
+  'PenTool': <PenTool className="w-5 h-5" />,
+  'BookOpen': <BookOpen className="w-5 h-5" />,
+  'Briefcase': <Briefcase className="w-5 h-5" />,
+  'Share2': <Share2 className="w-5 h-5" />,
+  'Globe': <Globe className="w-5 h-5" />,
 };
 
 // Default data
@@ -72,7 +72,8 @@ export default function SkillPortfolioPage() {
   const [categories, setCategories] = useState<SkillCategory[]>(defaultCategories);
   const [subSkills, setSubSkills] = useState<SubSkill[]>(defaultSubSkills);
   const [loading, setLoading] = useState(true);
-  const [hoveredCategory, setHoveredCategory] = useState<string | null>(null);
+  // Start with first category expanded
+  const [expandedCategory, setExpandedCategory] = useState<string>('1');
   const [profileImage, setProfileImage] = useState('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=400');
 
   useEffect(() => {
@@ -83,7 +84,6 @@ export default function SkillPortfolioPage() {
       }
 
       try {
-        // Fetch both categories and sub-skills
         const { data: catData } = await supabase
           .from('skill_categories')
           .select('*')
@@ -96,13 +96,11 @@ export default function SkillPortfolioPage() {
           .eq('is_active', true)
           .order('order_index', { ascending: true });
 
-        // Only use Supabase data if BOTH categories AND sub_skills have data
-        // This ensures the category_id references match properly
         if (catData && catData.length > 0 && skillData && skillData.length > 0) {
           setCategories(catData);
           setSubSkills(skillData);
+          setExpandedCategory(catData[0].id);
         }
-        // If only categories exist, keep using defaults for both to maintain ID consistency
 
         const { data: imgData } = supabase.storage.from('images').getPublicUrl('profile.jpg');
         if (imgData?.publicUrl) {
@@ -120,22 +118,16 @@ export default function SkillPortfolioPage() {
     fetchData();
   }, []);
 
-  // Helper to generate slug from title
   const generateSlug = (title: string) => {
     return title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
   };
 
-  // Get slug for category (use existing or generate from title)
   const getCategorySlug = (category: SkillCategory) => {
     return category.slug || generateSlug(category.title);
   };
 
   const getSubSkillsForCategory = (categoryId: string) => {
     return subSkills.filter(skill => skill.category_id === categoryId);
-  };
-
-  const getCategoryBySlug = (slug: string) => {
-    return categories.find(cat => cat.slug === slug);
   };
 
   if (loading) {
@@ -187,17 +179,17 @@ export default function SkillPortfolioPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            className="text-center mb-12"
           >
-            <h1 className="text-6xl lg:text-8xl font-black uppercase tracking-tighter leading-none">
-              Content
+            <h1 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-none mb-4">
+              Skill <span className="text-[#2ecc71]">Portfolio</span>
             </h1>
-            <p className="text-slate-400 mt-4 max-w-xl mx-auto">
-              Hover over a category to see skills, click to explore in detail
+            <p className="text-slate-400 max-w-xl mx-auto">
+              Explore my expertise across different categories. Click on any skill to learn more.
             </p>
           </motion.div>
 
-          {/* Main Grid */}
+          {/* Main Grid - Profile + Skills */}
           <div className="grid lg:grid-cols-12 gap-8 items-start">
             {/* Profile Image */}
             <motion.div
@@ -207,135 +199,117 @@ export default function SkillPortfolioPage() {
               className="lg:col-span-3 hidden lg:block"
             >
               <div className="sticky top-32">
-                <div className="relative">
-                  <div className="w-full aspect-[3/4] rounded-3xl overflow-hidden border-4 border-white/10 bg-slate-900">
-                    <img src={profileImage} alt="Neaz Md. Morshed" className="w-full h-full object-cover" />
-                  </div>
+                <div className="w-full aspect-[3/4] rounded-3xl overflow-hidden border-4 border-white/10 bg-slate-900">
+                  <img src={profileImage} alt="Neaz Md. Morshed" className="w-full h-full object-cover" />
+                </div>
+                <div className="mt-6 p-4 bg-slate-900/50 rounded-2xl border border-white/5">
+                  <div className="text-[#2ecc71] text-3xl font-black mb-1">10+</div>
+                  <div className="text-slate-400 text-xs uppercase tracking-wider">Years Experience</div>
                 </div>
               </div>
             </motion.div>
 
-            {/* Categories List */}
+            {/* Skills Accordion */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="lg:col-span-5"
+              className="lg:col-span-9"
             >
-              <div className="space-y-3">
-                {categories.map((category, index) => (
-                  <motion.div
-                    key={category.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.4, delay: index * 0.1 }}
-                    onMouseEnter={() => setHoveredCategory(category.id)}
-                    onMouseLeave={() => setHoveredCategory(null)}
-                    className="relative"
-                  >
-                    <Link href={`/skills/portfolio/${getCategorySlug(category)}`}>
-                      <div className={`flex items-center gap-6 p-5 rounded-2xl cursor-pointer transition-all duration-300 group ${
-                        hoveredCategory === category.id
-                          ? 'bg-[#1a1f2e] border-l-4 border-[#2ecc71] shadow-lg'
-                          : 'hover:bg-slate-900/50 border-l-4 border-transparent hover:border-slate-700'
-                      }`}>
+              <div className="space-y-4">
+                {categories.map((category, index) => {
+                  const categorySkills = getSubSkillsForCategory(category.id);
+                  const isExpanded = expandedCategory === category.id;
+
+                  return (
+                    <motion.div
+                      key={category.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: index * 0.05 }}
+                      className={`rounded-2xl overflow-hidden border transition-all duration-300 ${
+                        isExpanded
+                          ? 'bg-[#1a1f2e] border-[#2ecc71]/30 shadow-lg shadow-[#2ecc71]/5'
+                          : 'bg-slate-900/40 border-white/5 hover:border-white/10'
+                      }`}
+                      onMouseEnter={() => setExpandedCategory(category.id)}
+                    >
+                      {/* Category Header */}
+                      <div className="flex items-center gap-4 p-5 cursor-pointer">
                         {/* Number */}
-                        <div className={`text-3xl font-black w-14 text-center transition-colors ${
-                          hoveredCategory === category.id ? 'text-[#2ecc71]' : 'text-slate-600 group-hover:text-slate-400'
+                        <div className={`text-2xl font-black w-12 text-center transition-colors ${
+                          isExpanded ? 'text-[#2ecc71]' : 'text-slate-600'
                         }`}>
                           {String(index + 1).padStart(2, '0')}
                         </div>
 
-                        {/* Title */}
-                        <div className="flex-1">
-                          <h3 className={`text-lg font-bold underline underline-offset-4 decoration-2 transition-colors ${
-                            hoveredCategory === category.id
-                              ? 'text-[#2ecc71] decoration-[#2ecc71]'
-                              : 'text-white decoration-slate-600 group-hover:decoration-[#2ecc71]'
-                          }`}>
-                            {category.title}
-                          </h3>
+                        {/* Icon */}
+                        <div className={`p-3 rounded-xl transition-all ${
+                          isExpanded ? 'bg-[#2ecc71] text-slate-900' : 'bg-white/5 text-slate-400'
+                        }`}>
+                          {iconMap[category.icon] || <Briefcase className="w-5 h-5" />}
                         </div>
 
-                        {/* Arrow */}
-                        <ChevronRight
-                          size={20}
-                          className={`transition-all duration-300 ${
-                            hoveredCategory === category.id
-                              ? 'text-[#2ecc71] translate-x-1'
-                              : 'text-slate-600 group-hover:text-[#2ecc71]'
-                          }`}
-                        />
+                        {/* Title & Info */}
+                        <div className="flex-1">
+                          <Link href={`/skills/portfolio/${getCategorySlug(category)}`}>
+                            <h3 className={`text-lg font-bold transition-colors hover:text-[#2ecc71] ${
+                              isExpanded ? 'text-white' : 'text-slate-300'
+                            }`}>
+                              {category.title}
+                            </h3>
+                          </Link>
+                          <p className="text-slate-500 text-xs mt-1">{categorySkills.length} services available</p>
+                        </div>
+
+                        {/* Expand Arrow */}
+                        <div className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+                          <ChevronDown size={20} className={isExpanded ? 'text-[#2ecc71]' : 'text-slate-600'} />
+                        </div>
+
+                        {/* View All Link */}
+                        <Link
+                          href={`/skills/portfolio/${getCategorySlug(category)}`}
+                          className="text-[10px] font-bold uppercase tracking-wider text-[#2ecc71] hover:underline px-3 py-2 bg-[#2ecc71]/10 rounded-lg"
+                        >
+                          View All
+                        </Link>
                       </div>
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
 
-            {/* Sub Skills Panel */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="lg:col-span-4"
-            >
-              <div className="sticky top-32 min-h-[400px]">
-                <AnimatePresence mode="wait">
-                  {hoveredCategory ? (
-                    <motion.div
-                      key={hoveredCategory}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ duration: 0.2 }}
-                      className="space-y-3"
-                    >
-                      {getSubSkillsForCategory(hoveredCategory).map((skill, index) => {
-                        const category = categories.find(c => c.id === hoveredCategory);
-                        return (
+                      {/* Sub-skills - Expandable Content */}
+                      <AnimatePresence>
+                        {isExpanded && (
                           <motion.div
-                            key={skill.id}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.2, delay: index * 0.05 }}
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="overflow-hidden"
                           >
-                            <Link href={`/skills/portfolio/${category ? getCategorySlug(category) : 'unknown'}/${skill.slug || generateSlug(skill.title)}`}>
-                              <div className="p-4 bg-[#c9a089] hover:bg-[#d4b19a] text-slate-900 rounded-xl font-semibold transition-all hover:translate-x-2 hover:shadow-lg cursor-pointer group">
-                                <span className="flex items-center justify-between">
-                                  <span className="underline underline-offset-2">{skill.title}</span>
-                                  <ArrowRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" />
-                                </span>
-                              </div>
-                            </Link>
+                            <div className="px-5 pb-5 pt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+                              {categorySkills.map((skill, skillIndex) => (
+                                <motion.div
+                                  key={skill.id}
+                                  initial={{ opacity: 0, x: -10 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ duration: 0.2, delay: skillIndex * 0.05 }}
+                                >
+                                  <Link href={`/skills/portfolio/${getCategorySlug(category)}/${skill.slug || generateSlug(skill.title)}`}>
+                                    <div className="flex items-center gap-3 p-3 bg-[#c9a089] hover:bg-[#d4b19a] text-slate-900 rounded-xl transition-all hover:translate-x-1 hover:shadow-md group cursor-pointer">
+                                      <ChevronRight size={16} className="text-slate-700 group-hover:translate-x-1 transition-transform" />
+                                      <span className="font-semibold text-sm">{skill.title}</span>
+                                      <ArrowRight size={14} className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity" />
+                                    </div>
+                                  </Link>
+                                </motion.div>
+                              ))}
+                            </div>
                           </motion.div>
-                        );
-                      })}
+                        )}
+                      </AnimatePresence>
                     </motion.div>
-                  ) : (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="text-center p-10 bg-slate-900/30 rounded-3xl border border-dashed border-slate-700 h-full flex flex-col items-center justify-center"
-                    >
-                      <ArrowLeft size={40} className="text-slate-600 mx-auto mb-4" />
-                      <p className="text-slate-500 font-medium">
-                        Hover over a category to see sub-skills
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                {/* Decorative dots */}
-                <div className="mt-8 flex justify-end gap-2">
-                  {[...Array(6)].map((_, i) => (
-                    <div key={i} className="flex flex-col gap-2">
-                      {[...Array(3)].map((_, j) => (
-                        <div key={j} className={`w-2 h-2 rounded-full ${(i + j) % 2 === 0 ? 'bg-[#2ecc71]/40' : 'bg-slate-700/40'}`} />
-                      ))}
-                    </div>
-                  ))}
-                </div>
+                  );
+                })}
               </div>
             </motion.div>
           </div>
