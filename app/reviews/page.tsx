@@ -234,18 +234,18 @@ export default function ReviewsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -30 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  className="p-8 bg-slate-900/60 border border-white/5 rounded-[2rem] hover:border-[#2ecc71]/30 transition-all group relative"
+                  className="p-8 pt-12 bg-slate-900/60 border border-white/5 rounded-[2rem] hover:border-[#2ecc71]/30 transition-all group relative overflow-visible mt-8"
                 >
-                  {/* Client Image - Top Right */}
-                  <div className="absolute top-6 right-6">
+                  {/* Client Image - Top Right - Breaking out of card */}
+                  <div className="absolute -top-6 right-6">
                     {review.client_image ? (
                       <img
                         src={review.client_image}
                         alt={review.client_name}
-                        className="w-20 h-20 rounded-full object-cover border-3 border-[#2ecc71]/40 shadow-xl shadow-[#2ecc71]/20 group-hover:border-[#2ecc71]/70 group-hover:scale-105 transition-all"
+                        className="w-20 h-20 rounded-full object-cover border-4 border-[#0b0f1a] ring-2 ring-[#2ecc71]/50 shadow-2xl shadow-[#2ecc71]/30 group-hover:ring-[#2ecc71] group-hover:scale-110 transition-all"
                       />
                     ) : (
-                      <div className="w-20 h-20 rounded-full bg-slate-800/80 border-2 border-white/10 flex items-center justify-center group-hover:border-[#2ecc71]/30 transition-all">
+                      <div className="w-20 h-20 rounded-full bg-slate-800 border-4 border-[#0b0f1a] ring-2 ring-white/10 flex items-center justify-center group-hover:ring-[#2ecc71]/30 transition-all shadow-xl">
                         <User className="w-10 h-10 text-slate-600" />
                       </div>
                     )}
