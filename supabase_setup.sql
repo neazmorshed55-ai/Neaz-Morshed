@@ -139,3 +139,84 @@ CREATE POLICY "Allow public read portfolio" ON portfolio_items
 
 CREATE POLICY "Allow authenticated manage portfolio" ON portfolio_items
   FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+-- ============================================
+-- SKILL CATEGORIES TABLE - For Skill Portfolio Page
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS skill_categories (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at TIMESTAMPTZ DEFAULT now(),
+  title TEXT NOT NULL,
+  order_index INTEGER DEFAULT 0,
+  is_active BOOLEAN DEFAULT true
+);
+
+ALTER TABLE skill_categories ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read skill_categories" ON skill_categories
+  FOR SELECT USING (true);
+
+CREATE POLICY "Allow authenticated manage skill_categories" ON skill_categories
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+-- ============================================
+-- SUB SKILLS TABLE - Skills under each category
+-- ============================================
+
+CREATE TABLE IF NOT EXISTS sub_skills (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  created_at TIMESTAMPTZ DEFAULT now(),
+  category_id UUID REFERENCES skill_categories(id) ON DELETE CASCADE,
+  title TEXT NOT NULL,
+  link TEXT,
+  order_index INTEGER DEFAULT 0,
+  is_active BOOLEAN DEFAULT true
+);
+
+ALTER TABLE sub_skills ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Allow public read sub_skills" ON sub_skills
+  FOR SELECT USING (true);
+
+CREATE POLICY "Allow authenticated manage sub_skills" ON sub_skills
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+-- Insert default skill categories
+INSERT INTO skill_categories (title, order_index) VALUES
+  ('Video Production', 1),
+  ('Graphic Design', 2),
+  ('Content Writing', 3),
+  ('eBook Formatting', 4),
+  ('Virtual Assistant Service', 5),
+  ('Social Media Marketing', 6),
+  ('WordPress Design', 7);
+
+-- Insert sub skills (you'll need to get the category IDs after inserting categories)
+-- This is a template - run separately after categories are created:
+/*
+INSERT INTO sub_skills (category_id, title, link, order_index) VALUES
+  -- Video Production
+  ((SELECT id FROM skill_categories WHERE title = 'Video Production'), 'Podcast Creation', NULL, 1),
+  ((SELECT id FROM skill_categories WHERE title = 'Video Production'), 'Subtitle Adding in a Video', NULL, 2),
+  -- Graphic Design
+  ((SELECT id FROM skill_categories WHERE title = 'Graphic Design'), 'Brochure design', NULL, 1),
+  ((SELECT id FROM skill_categories WHERE title = 'Graphic Design'), 'YouTube Thumbnail Design', NULL, 2),
+  ((SELECT id FROM skill_categories WHERE title = 'Graphic Design'), 'Canva Design', NULL, 3),
+  ((SELECT id FROM skill_categories WHERE title = 'Graphic Design'), 'Tshirt and Cup Design', NULL, 4),
+  -- Content Writing
+  ((SELECT id FROM skill_categories WHERE title = 'Content Writing'), 'Article, blog, SMM post writing', NULL, 1),
+  ((SELECT id FROM skill_categories WHERE title = 'Content Writing'), 'eBook writing', NULL, 2),
+  -- eBook Formatting
+  ((SELECT id FROM skill_categories WHERE title = 'eBook Formatting'), 'eBook Design', NULL, 1),
+  -- Virtual Assistant Service
+  ((SELECT id FROM skill_categories WHERE title = 'Virtual Assistant Service'), 'Lead Generation VA', NULL, 1),
+  ((SELECT id FROM skill_categories WHERE title = 'Virtual Assistant Service'), 'Web Research VA', NULL, 2),
+  ((SELECT id FROM skill_categories WHERE title = 'Virtual Assistant Service'), 'Job Search VA', NULL, 3),
+  ((SELECT id FROM skill_categories WHERE title = 'Virtual Assistant Service'), 'Data Entry', NULL, 4),
+  -- Social Media Marketing
+  ((SELECT id FROM skill_categories WHERE title = 'Social Media Marketing'), 'Social media management', NULL, 1),
+  ((SELECT id FROM skill_categories WHERE title = 'Social Media Marketing'), 'Organic Reach and Daily Post', NULL, 2),
+  -- WordPress Design
+  ((SELECT id FROM skill_categories WHERE title = 'WordPress Design'), 'Web Design', NULL, 1);
+*/

@@ -117,15 +117,13 @@ export default function SkillsPage() {
               If you want one stop administrative support then you can give your attention to this profile. You can spend few time to save your valuable time. I have 10+ years working experience in online and offline marketplace.
             </p>
 
-            <a
-              href={pdfUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/skills/portfolio"
               className="inline-flex items-center gap-3 px-10 py-5 border-2 border-[#2ecc71] text-white font-black rounded-xl hover:bg-[#2ecc71] hover:text-slate-900 transition-all uppercase tracking-widest text-sm group"
             >
               View Full Skill Portfolio
-              <ExternalLink size={18} className="group-hover:translate-x-1 transition-transform" />
-            </a>
+              <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
           </motion.div>
         </div>
       </section>
