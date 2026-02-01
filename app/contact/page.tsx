@@ -222,14 +222,14 @@ export default function ContactPage() {
         </section>
         {/* Calendly Section */}
 
-        <section className="py-20 container mx-auto px-6 max-w-7xl bg-[#0b0f1a] relative min-h-[700px]">
+        <section className="py-8 container mx-auto px-6 max-w-7xl bg-[#0b0f1a] relative min-h-[600px]">
           {!isCalendarLoaded && (
             <div className="absolute inset-0 flex items-center justify-center">
               <Loader2 className="w-12 h-12 text-[#2ecc71] animate-spin" />
             </div>
           )}
 
-          <div className="w-full h-[700px] relative z-10">
+          <div className="w-full h-[600px] relative z-10">
             <div
               className="calendly-inline-widget w-full h-full"
               data-url="https://calendly.com/neazmd-tamim/new-meeting?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0b0f1a&text_color=ffffff&primary_color=2ecc71"

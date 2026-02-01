@@ -140,7 +140,26 @@ export default function BlogDetailPage({ params }: { params: { slug: string } })
                     )}
 
                     {/* Article Body */}
-                    <article className="prose prose-invert prose-lg max-w-none">
+                    <article
+                        className="prose prose-invert prose-lg max-w-none
+                            prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight
+                            prose-h1:text-4xl prose-h1:text-white prose-h1:mb-6 prose-h1:mt-12
+                            prose-h2:text-3xl prose-h2:text-white prose-h2:mb-5 prose-h2:mt-10 prose-h2:border-l-4 prose-h2:border-[#2ecc71] prose-h2:pl-4
+                            prose-h3:text-2xl prose-h3:text-slate-200 prose-h3:mb-4 prose-h3:mt-8
+                            prose-h4:text-xl prose-h4:text-slate-300 prose-h4:mb-3 prose-h4:mt-6
+                            prose-p:text-slate-300 prose-p:leading-relaxed prose-p:mb-6 prose-p:text-lg
+                            prose-strong:text-[#2ecc71] prose-strong:font-bold
+                            prose-a:text-[#2ecc71] prose-a:no-underline hover:prose-a:underline
+                            prose-ul:my-6 prose-ul:space-y-3
+                            prose-ol:my-6 prose-ol:space-y-3 prose-ol:list-decimal prose-ol:pl-6
+                            prose-li:text-slate-300 prose-li:pl-2
+                            prose-li:marker:text-[#2ecc71] prose-li:marker:font-bold
+                            prose-blockquote:border-l-4 prose-blockquote:border-[#2ecc71] prose-blockquote:bg-slate-900/50 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-2xl prose-blockquote:italic prose-blockquote:text-slate-400
+                            prose-code:bg-slate-800 prose-code:px-2 prose-code:py-1 prose-code:rounded-lg prose-code:text-[#2ecc71] prose-code:text-sm
+                            prose-pre:bg-slate-900 prose-pre:border prose-pre:border-white/10 prose-pre:rounded-2xl
+                            prose-img:rounded-2xl prose-img:border prose-img:border-white/10
+                            prose-hr:border-white/10 prose-hr:my-12"
+                    >
                         {/* If content is HTML (from rich text editor later), verify safety. For now, assuming raw text or basic HTML provided by Admin */}
                         <div dangerouslySetInnerHTML={{ __html: blog.content ? blog.content.replace(/\n/g, '<br/>') : '' }} />
                     </article>
@@ -167,6 +186,8 @@ export default function BlogDetailPage({ params }: { params: { slug: string } })
             <footer className="py-8 border-t border-white/5">
                 <div className="container mx-auto px-6 max-w-7xl flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
                     <div className="flex gap-8">
+                        <a href="/blog" className="text-slate-500 hover:text-[#2ecc71] transition-all uppercase text-[10px] font-bold tracking-widest">Blog</a>
+                        <a href="https://linktr.ee/neazmorshed" target="_blank" className="text-slate-500 hover:text-[#2ecc71] transition-all uppercase text-[10px] font-bold tracking-widest">Linktree</a>
                         <a href="https://www.linkedin.com/in/neazmorshed222/" target="_blank" className="text-slate-500 hover:text-[#2ecc71] transition-all uppercase text-[10px] font-bold tracking-widest">LinkedIn</a>
                         <a href="https://www.fiverr.com/neaz222" target="_blank" className="text-slate-500 hover:text-[#2ecc71] transition-all uppercase text-[10px] font-bold tracking-widest">Fiverr</a>
                         <a href="https://www.facebook.com/neazmorshed001/" target="_blank" className="text-slate-500 hover:text-[#2ecc71] transition-all uppercase text-[10px] font-bold tracking-widest">Facebook</a>
