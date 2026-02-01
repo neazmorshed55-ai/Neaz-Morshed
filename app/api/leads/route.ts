@@ -8,15 +8,66 @@ const supabase = supabaseUrl && supabaseServiceKey
   ? createClient(supabaseUrl, supabaseServiceKey)
   : null;
 
+// Analyze lead intent from chat history
+function analyzeLeadIntent(chatHistory: any[], serviceInterest: string, budget: string) {
+  const intentSignals: string[] = [];
+  let urgencyLevel = 'medium';
+  let buyingIntent = 'medium';
+
+  // Analyze budget for buying intent
+  if (budget) {
+    if (budget.includes('5000') || budget.includes('10000') || budget.includes('+')) {
+      buyingIntent = 'high';
+      intentSignals.push('High budget indicates serious buyer');
+    } else if (budget.includes('Under') || budget.includes('500')) {
+      buyingIntent = 'low';
+      intentSignals.push('Lower budget - may need nurturing');
+    }
+  }
+
+  // Analyze service interest
+  const highValueServices = ['Web Development', 'Lead Generation', 'Data & CRM Management'];
+  if (highValueServices.some(s => serviceInterest?.includes(s))) {
+    intentSignals.push(`Interested in high-value service: ${serviceInterest}`);
+  }
+
+  // Check chat history for urgency keywords
+  if (chatHistory && Array.isArray(chatHistory)) {
+    const userMessages = chatHistory
+      .filter((m: any) => m.role === 'user')
+      .map((m: any) => m.content.toLowerCase())
+      .join(' ');
+
+    if (userMessages.includes('urgent') || userMessages.includes('asap') || userMessages.includes('immediately')) {
+      urgencyLevel = 'high';
+      intentSignals.push('Expressed urgency in conversation');
+    }
+    if (userMessages.includes('project') || userMessages.includes('need help')) {
+      intentSignals.push('Has an active project need');
+    }
+  }
+
+  return {
+    buyingIntent,
+    urgencyLevel,
+    intentSignals,
+    priorityScore: buyingIntent === 'high' ? 'HOT' : urgencyLevel === 'high' ? 'WARM' : 'NORMAL',
+  };
+}
+
 // Send email notification for new lead
-async function sendLeadNotification(lead: any) {
+async function sendLeadNotification(lead: any, chatHistory: any[]) {
   const resendApiKey = process.env.RESEND_API_KEY;
-  const notificationEmail = process.env.NOTIFICATION_EMAIL || 'hello@neaz.pro';
+  const notificationEmail = process.env.NOTIFICATION_EMAIL || 'neazmd.tamim@gmail.com';
 
   if (!resendApiKey) {
     console.log('Resend API key not configured, skipping email notification');
     return;
   }
+
+  // Analyze lead intent
+  const intentAnalysis = analyzeLeadIntent(chatHistory, lead.service_interest, lead.budget);
+  const isHighPriority = intentAnalysis.priorityScore === 'HOT';
 
   try {
     const response = await fetch('https://api.resend.com/emails', {
@@ -28,71 +79,150 @@ async function sendLeadNotification(lead: any) {
       body: JSON.stringify({
         from: 'Neaz Portfolio <notifications@neaz.pro>',
         to: [notificationEmail],
-        subject: `New Lead: ${lead.name} - ${lead.service_interest || 'General Inquiry'}`,
+        subject: isHighPriority
+          ? `🔥 HOT LEAD: ${lead.name} - ${lead.service_interest || 'General Inquiry'}`
+          : `New Lead: ${lead.name} - ${lead.service_interest || 'General Inquiry'}`,
         html: `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <div style="background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); padding: 30px; border-radius: 10px 10px 0 0;">
-              <h1 style="color: white; margin: 0; font-size: 24px;">New Lead Captured!</h1>
+            <div style="background: linear-gradient(135deg, ${isHighPriority ? '#e74c3c' : '#2ecc71'} 0%, ${isHighPriority ? '#c0392b' : '#27ae60'} 100%); padding: 30px; border-radius: 10px 10px 0 0;">
+              <h1 style="color: white; margin: 0; font-size: 24px;">
+                ${isHighPriority ? '🔥 Hot Lead Alert!' : '✨ New Lead Captured!'}
+              </h1>
+              <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">
+                ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Dhaka' })}
+              </p>
             </div>
-            <div style="background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px;">
-              <h2 style="color: #333; margin-top: 0;">Contact Details</h2>
-              <table style="width: 100%; border-collapse: collapse;">
-                <tr>
-                  <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Name:</td>
-                  <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">${lead.name}</td>
-                </tr>
-                <tr>
-                  <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Email:</td>
-                  <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">
-                    <a href="mailto:${lead.email}" style="color: #2ecc71;">${lead.email}</a>
-                  </td>
-                </tr>
-                ${lead.phone ? `
-                <tr>
-                  <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Phone:</td>
-                  <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">${lead.phone}</td>
-                </tr>
-                ` : ''}
-                ${lead.company ? `
-                <tr>
-                  <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Company:</td>
-                  <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">${lead.company}</td>
-                </tr>
-                ` : ''}
-                ${lead.service_interest ? `
-                <tr>
-                  <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Service Interest:</td>
-                  <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">${lead.service_interest}</td>
-                </tr>
-                ` : ''}
-                ${lead.budget ? `
-                <tr>
-                  <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Budget:</td>
-                  <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">${lead.budget}</td>
-                </tr>
-                ` : ''}
-                ${lead.country ? `
-                <tr>
-                  <td style="padding: 10px 0; border-bottom: 1px solid #eee; font-weight: bold; color: #666;">Location:</td>
-                  <td style="padding: 10px 0; border-bottom: 1px solid #eee; color: #333;">${lead.city ? lead.city + ', ' : ''}${lead.country}</td>
-                </tr>
-                ` : ''}
-              </table>
 
-              ${lead.message ? `
-              <h3 style="color: #333; margin-top: 20px;">Message</h3>
-              <p style="background: white; padding: 15px; border-radius: 5px; color: #555; line-height: 1.6;">${lead.message}</p>
+            <div style="background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px;">
+              <!-- Priority Badge -->
+              <div style="text-align: center; margin-bottom: 20px;">
+                <span style="display: inline-block; background: ${isHighPriority ? '#e74c3c' : intentAnalysis.priorityScore === 'WARM' ? '#f39c12' : '#3498db'}; color: white; padding: 8px 20px; border-radius: 20px; font-weight: bold; font-size: 14px;">
+                  ${intentAnalysis.priorityScore} LEAD
+                </span>
+              </div>
+
+              <!-- Contact Details -->
+              <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <h2 style="color: #333; margin: 0 0 15px 0; font-size: 18px;">👤 Contact Details</h2>
+                <table style="width: 100%;">
+                  <tr>
+                    <td style="padding: 8px 0; color: #666; width: 120px;">Name:</td>
+                    <td style="padding: 8px 0; color: #333; font-weight: bold;">${lead.name}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 8px 0; color: #666;">Email:</td>
+                    <td style="padding: 8px 0;">
+                      <a href="mailto:${lead.email}" style="color: #2ecc71; font-weight: bold;">${lead.email}</a>
+                    </td>
+                  </tr>
+                  ${lead.phone ? `
+                  <tr>
+                    <td style="padding: 8px 0; color: #666;">Phone:</td>
+                    <td style="padding: 8px 0; color: #333;">${lead.phone}</td>
+                  </tr>
+                  ` : ''}
+                  ${lead.company ? `
+                  <tr>
+                    <td style="padding: 8px 0; color: #666;">Company:</td>
+                    <td style="padding: 8px 0; color: #333;">${lead.company}</td>
+                  </tr>
+                  ` : ''}
+                  ${lead.country ? `
+                  <tr>
+                    <td style="padding: 8px 0; color: #666;">Location:</td>
+                    <td style="padding: 8px 0; color: #333;">${lead.city ? lead.city + ', ' : ''}${lead.country}</td>
+                  </tr>
+                  ` : ''}
+                </table>
+              </div>
+
+              <!-- Interest & Budget -->
+              <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #2ecc71;">
+                <h2 style="color: #333; margin: 0 0 15px 0; font-size: 18px;">🎯 Interest Details</h2>
+                <table style="width: 100%;">
+                  ${lead.service_interest ? `
+                  <tr>
+                    <td style="padding: 8px 0; color: #666; width: 120px;">Service:</td>
+                    <td style="padding: 8px 0;">
+                      <span style="background: #2ecc71; color: white; padding: 4px 12px; border-radius: 15px; font-size: 13px; font-weight: bold;">
+                        ${lead.service_interest}
+                      </span>
+                    </td>
+                  </tr>
+                  ` : ''}
+                  ${lead.budget ? `
+                  <tr>
+                    <td style="padding: 8px 0; color: #666;">Budget:</td>
+                    <td style="padding: 8px 0;">
+                      <span style="background: ${lead.budget.includes('5000') || lead.budget.includes('10000') ? '#e74c3c' : '#f39c12'}; color: white; padding: 4px 12px; border-radius: 15px; font-size: 13px; font-weight: bold;">
+                        ${lead.budget}
+                      </span>
+                    </td>
+                  </tr>
+                  ` : ''}
+                  <tr>
+                    <td style="padding: 8px 0; color: #666;">Buying Intent:</td>
+                    <td style="padding: 8px 0; color: #333; text-transform: capitalize; font-weight: bold;">${intentAnalysis.buyingIntent}</td>
+                  </tr>
+                </table>
+              </div>
+
+              <!-- Intent Analysis -->
+              ${intentAnalysis.intentSignals.length > 0 ? `
+              <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; border-left: 4px solid #9b59b6;">
+                <h2 style="color: #333; margin: 0 0 15px 0; font-size: 18px;">📊 AI Intent Analysis</h2>
+                <ul style="margin: 0; padding-left: 20px;">
+                  ${intentAnalysis.intentSignals.map(signal => `
+                    <li style="padding: 5px 0; color: #555;">${signal}</li>
+                  `).join('')}
+                </ul>
+              </div>
               ` : ''}
 
-              <div style="margin-top: 30px; text-align: center;">
+              <!-- Message -->
+              ${lead.message ? `
+              <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <h2 style="color: #333; margin: 0 0 15px 0; font-size: 18px;">💬 Their Message</h2>
+                <p style="background: #f5f5f5; padding: 15px; border-radius: 8px; color: #555; line-height: 1.6; margin: 0; font-style: italic;">
+                  "${lead.message}"
+                </p>
+              </div>
+              ` : ''}
+
+              <!-- Chat History Summary -->
+              ${chatHistory && chatHistory.length > 0 ? `
+              <div style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <h2 style="color: #333; margin: 0 0 15px 0; font-size: 18px;">🤖 Chatbot Conversation</h2>
+                <div style="background: #f5f5f5; padding: 15px; border-radius: 8px; max-height: 200px; overflow-y: auto;">
+                  ${chatHistory.slice(-6).map((msg: any) => `
+                    <div style="margin-bottom: 10px; ${msg.role === 'user' ? 'text-align: right;' : ''}">
+                      <span style="display: inline-block; padding: 8px 12px; border-radius: 12px; font-size: 13px; max-width: 80%; ${
+                        msg.role === 'user'
+                          ? 'background: #2ecc71; color: white;'
+                          : 'background: white; color: #333; border: 1px solid #ddd;'
+                      }">
+                        ${msg.content}
+                      </span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+              ` : ''}
+
+              <!-- Quick Actions -->
+              <div style="text-align: center; margin-top: 20px;">
+                <a href="mailto:${lead.email}?subject=Re: Your inquiry about ${lead.service_interest || 'our services'}&body=Hi ${lead.name},%0D%0A%0D%0AThank you for your interest in my services.%0D%0A%0D%0A"
+                   style="display: inline-block; background: #2ecc71; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 5px;">
+                  📧 Reply Now
+                </a>
                 <a href="https://neaz-morshed.vercel.app/admin/leads"
-                   style="display: inline-block; background: #2ecc71; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold;">
-                  View in Dashboard
+                   style="display: inline-block; background: #3498db; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 5px;">
+                  📋 View Dashboard
                 </a>
               </div>
 
-              <p style="color: #999; font-size: 12px; margin-top: 30px; text-align: center;">
-                This lead was captured via the AI Chatbot on ${new Date().toLocaleDateString()}
+              <p style="color: #999; font-size: 11px; margin-top: 30px; text-align: center;">
+                Lead captured via AI Chatbot • ${lead.page_url || 'https://neaz-morshed.vercel.app'}
               </p>
             </div>
           </div>
@@ -177,8 +307,8 @@ export async function POST(request: NextRequest) {
 
     if (error) throw error;
 
-    // Send email notification asynchronously
-    sendLeadNotification({ ...data, ...geoData });
+    // Send email notification asynchronously with chat history
+    sendLeadNotification({ ...data, ...geoData }, chatHistory || []);
 
     return NextResponse.json({ success: true, lead: data });
   } catch (error) {
