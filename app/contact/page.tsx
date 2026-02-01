@@ -218,6 +218,17 @@ export default function ContactPage() {
             </motion.div>
           </div>
         </section>
+        {/* Calendly Section */}
+        <section className="py-20 container mx-auto px-6 max-w-7xl bg-[#0b0f1a]">
+          <div className="w-full" style={{ minWidth: '320px', height: '700px' }}>
+            <div
+              className="calendly-inline-widget w-full h-full"
+              data-url="https://calendly.com/neazmd-tamim/new-meeting?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0b0f1a&text_color=ffffff&primary_color=2ecc71"
+              style={{ minWidth: '320px', height: '700px' }}
+            />
+            <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+          </div>
+        </section>
       </main>
 
       {/* Footer */}
