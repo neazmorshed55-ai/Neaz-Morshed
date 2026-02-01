@@ -22,7 +22,74 @@ interface Review {
   date: string;
   is_featured: boolean;
   order_index: number;
+  country_code: string | null;
+  country_name: string | null;
 }
+
+// Country list with codes for flag emojis
+const countries = [
+  { code: '', name: 'Not specified' },
+  { code: 'US', name: 'United States' },
+  { code: 'GB', name: 'United Kingdom' },
+  { code: 'CA', name: 'Canada' },
+  { code: 'AU', name: 'Australia' },
+  { code: 'DE', name: 'Germany' },
+  { code: 'FR', name: 'France' },
+  { code: 'NL', name: 'Netherlands' },
+  { code: 'IT', name: 'Italy' },
+  { code: 'ES', name: 'Spain' },
+  { code: 'SE', name: 'Sweden' },
+  { code: 'NO', name: 'Norway' },
+  { code: 'DK', name: 'Denmark' },
+  { code: 'FI', name: 'Finland' },
+  { code: 'CH', name: 'Switzerland' },
+  { code: 'AT', name: 'Austria' },
+  { code: 'BE', name: 'Belgium' },
+  { code: 'IE', name: 'Ireland' },
+  { code: 'PT', name: 'Portugal' },
+  { code: 'PL', name: 'Poland' },
+  { code: 'CZ', name: 'Czech Republic' },
+  { code: 'IN', name: 'India' },
+  { code: 'BD', name: 'Bangladesh' },
+  { code: 'PK', name: 'Pakistan' },
+  { code: 'JP', name: 'Japan' },
+  { code: 'CN', name: 'China' },
+  { code: 'KR', name: 'South Korea' },
+  { code: 'SG', name: 'Singapore' },
+  { code: 'MY', name: 'Malaysia' },
+  { code: 'ID', name: 'Indonesia' },
+  { code: 'PH', name: 'Philippines' },
+  { code: 'TH', name: 'Thailand' },
+  { code: 'VN', name: 'Vietnam' },
+  { code: 'AE', name: 'United Arab Emirates' },
+  { code: 'SA', name: 'Saudi Arabia' },
+  { code: 'QA', name: 'Qatar' },
+  { code: 'KW', name: 'Kuwait' },
+  { code: 'EG', name: 'Egypt' },
+  { code: 'ZA', name: 'South Africa' },
+  { code: 'NG', name: 'Nigeria' },
+  { code: 'KE', name: 'Kenya' },
+  { code: 'BR', name: 'Brazil' },
+  { code: 'MX', name: 'Mexico' },
+  { code: 'AR', name: 'Argentina' },
+  { code: 'CO', name: 'Colombia' },
+  { code: 'CL', name: 'Chile' },
+  { code: 'NZ', name: 'New Zealand' },
+  { code: 'IL', name: 'Israel' },
+  { code: 'TR', name: 'Turkey' },
+  { code: 'RU', name: 'Russia' },
+  { code: 'UA', name: 'Ukraine' },
+];
+
+// Convert country code to flag emoji
+const getFlagEmoji = (countryCode: string) => {
+  if (!countryCode) return '';
+  const codePoints = countryCode
+    .toUpperCase()
+    .split('')
+    .map(char => 127397 + char.charCodeAt(0));
+  return String.fromCodePoint(...codePoints);
+};
 
 export default function ReviewsManagement() {
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -44,7 +111,9 @@ export default function ReviewsManagement() {
     platform: 'Fiverr',
     date: '',
     is_featured: false,
-    order_index: 0
+    order_index: 0,
+    country_code: '',
+    country_name: ''
   });
 
   useEffect(() => {
@@ -91,7 +160,9 @@ export default function ReviewsManagement() {
         platform: review.platform,
         date: review.date,
         is_featured: review.is_featured,
-        order_index: review.order_index
+        order_index: review.order_index,
+        country_code: review.country_code || '',
+        country_name: review.country_name || ''
       });
     } else {
       setEditingReview(null);
@@ -105,7 +176,9 @@ export default function ReviewsManagement() {
         platform: 'Fiverr',
         date: new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }),
         is_featured: false,
-        order_index: reviews.length + 1
+        order_index: reviews.length + 1,
+        country_code: '',
+        country_name: ''
       });
     }
     setShowModal(true);
@@ -122,7 +195,9 @@ export default function ReviewsManagement() {
 
     const reviewData = {
       ...formData,
-      client_image: formData.client_image || null
+      client_image: formData.client_image || null,
+      country_code: formData.country_code || null,
+      country_name: formData.country_name || null
     };
 
     if (!supabase) {
@@ -268,7 +343,14 @@ export default function ReviewsManagement() {
                         </div>
                       )}
                       <div>
-                        <h3 className="text-white font-bold">{review.client_name}</h3>
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-white font-bold">{review.client_name}</h3>
+                          {review.country_code && (
+                            <span className="text-lg" title={review.country_name || ''}>
+                              {getFlagEmoji(review.country_code)}
+                            </span>
+                          )}
+                        </div>
                         <p className="text-slate-500 text-sm">{review.client_title} at {review.client_company}</p>
                       </div>
                       {review.is_featured && (
@@ -436,6 +518,28 @@ export default function ReviewsManagement() {
                         className="w-full bg-slate-800/50 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-[#2ecc71]/50"
                         placeholder="e.g., January 2025"
                       />
+                    </div>
+
+                    <div className="col-span-2">
+                      <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-2">Country (Optional)</label>
+                      <select
+                        value={formData.country_code}
+                        onChange={(e) => {
+                          const selected = countries.find(c => c.code === e.target.value);
+                          setFormData({
+                            ...formData,
+                            country_code: e.target.value,
+                            country_name: selected?.name || ''
+                          });
+                        }}
+                        className="w-full bg-slate-800/50 border border-white/10 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-[#2ecc71]/50"
+                      >
+                        {countries.map(c => (
+                          <option key={c.code} value={c.code}>
+                            {c.code ? `${getFlagEmoji(c.code)} ${c.name}` : c.name}
+                          </option>
+                        ))}
+                      </select>
                     </div>
                   </div>
 

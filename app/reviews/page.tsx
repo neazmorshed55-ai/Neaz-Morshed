@@ -23,7 +23,19 @@ interface Review {
   date: string;
   is_featured?: boolean;
   order_index?: number;
+  country_code?: string;
+  country_name?: string;
 }
+
+// Convert country code to flag emoji
+const getFlagEmoji = (countryCode: string) => {
+  if (!countryCode) return '';
+  const codePoints = countryCode
+    .toUpperCase()
+    .split('')
+    .map(char => 127397 + char.charCodeAt(0));
+  return String.fromCodePoint(...codePoints);
+};
 
 export default function ReviewsPage() {
   const [activeFilter, setActiveFilter] = useState<string>('all');
@@ -273,9 +285,17 @@ export default function ReviewsPage() {
                   {/* Author Info */}
                   <div className="flex items-center justify-between">
                     <div>
-                      <h4 className="font-black text-white mb-1">{review.client_name}</h4>
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="font-black text-white">{review.client_name}</h4>
+                        {review.country_code && (
+                          <span className="text-lg" title={review.country_name}>
+                            {getFlagEmoji(review.country_code)}
+                          </span>
+                        )}
+                      </div>
                       <p className="text-[10px] text-slate-500 uppercase tracking-wider">
                         {review.client_title} • {review.client_company}
+                        {review.country_name && ` • ${review.country_name}`}
                       </p>
                     </div>
                     <div className={`px-3 py-2 rounded-xl border flex items-center gap-2 ${getPlatformColor(review.platform)}`}>
