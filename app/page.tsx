@@ -224,7 +224,7 @@ export default function PortfolioPage() {
         {/* Hero */}
         <section id="home" className="relative min-h-screen flex items-center pt-24 overflow-hidden">
           <div className="absolute top-[10%] left-[5%] w-[600px] h-[600px] bg-[#2ecc71]/5 rounded-full blur-[180px] pointer-events-none animate-subtle-pulse"></div>
-          
+
           <div className="container mx-auto px-6 lg:px-12 grid lg:grid-cols-2 gap-16 items-center max-w-7xl relative z-10">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#2ecc71]/10 border border-[#2ecc71]/20 text-[#2ecc71] text-[10px] font-black uppercase tracking-[0.3em] mb-10">
@@ -281,7 +281,7 @@ export default function PortfolioPage() {
         {/* Skills Section */}
         <section id="skills" className="py-32 bg-slate-900/10">
           <div className="container mx-auto px-6 max-w-7xl">
-             <div className="text-center mb-24">
+            <div className="text-center mb-24">
               <span className="text-[#2ecc71] text-[11px] font-black uppercase tracking-[0.5em] mb-6 block">Expertise</span>
               <h2 className="text-5xl lg:text-7xl font-black uppercase tracking-tighter leading-none">Technical <br /><span className="text-slate-600">Competence</span></h2>
             </div>
@@ -294,10 +294,10 @@ export default function PortfolioPage() {
                       <span className="text-[#2ecc71] font-black">{skill.level}%</span>
                     </div>
                     <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }} 
-                        whileInView={{ width: `${skill.level}%` }} 
-                        transition={{ duration: 1.5, ease: "circOut" }} 
+                      <motion.div
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${skill.level}%` }}
+                        transition={{ duration: 1.5, ease: "circOut" }}
                         className="h-full bg-[#2ecc71] rounded-full shadow-[0_0_20px_rgba(46,204,113,0.5)]"
                       ></motion.div>
                     </div>
@@ -332,7 +332,7 @@ export default function PortfolioPage() {
                 Custom-tailored outsourcing strategies for modern startups and established enterprises.
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {services.map(service => (
                 <Link key={service.id} href={`/services/${service.slug}`}>
@@ -388,19 +388,17 @@ export default function PortfolioPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-100px" }}
                     transition={{ duration: 0.6, delay: index * 0.1 }}
-                    className={`relative flex items-center lg:items-stretch ${
-                      index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'
-                    } flex-row`}
+                    className={`relative flex items-center lg:items-stretch ${index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse'
+                      } flex-row`}
                   >
                     {/* Timeline Dot - Desktop */}
                     <div className="absolute left-1/2 transform -translate-x-1/2 hidden lg:flex items-center justify-center z-20">
                       <motion.div
                         whileHover={{ scale: 1.3 }}
-                        className={`w-6 h-6 rounded-full border-4 border-[#0b0f1a] cursor-pointer transition-all duration-300 ${
-                          activeExperience === exp.id
+                        className={`w-6 h-6 rounded-full border-4 border-[#0b0f1a] cursor-pointer transition-all duration-300 ${activeExperience === exp.id
                             ? 'bg-[#2ecc71] shadow-[0_0_20px_rgba(46,204,113,0.6)]'
                             : 'bg-[#2ecc71]/60 hover:bg-[#2ecc71]'
-                        }`}
+                          }`}
                         onClick={() => setActiveExperience(activeExperience === exp.id ? null : exp.id)}
                       />
                     </div>
@@ -409,11 +407,10 @@ export default function PortfolioPage() {
                     <div className="absolute left-8 transform -translate-x-1/2 lg:hidden flex items-center justify-center z-20">
                       <motion.div
                         whileHover={{ scale: 1.3 }}
-                        className={`w-5 h-5 rounded-full border-4 border-[#0b0f1a] cursor-pointer transition-all duration-300 ${
-                          activeExperience === exp.id
+                        className={`w-5 h-5 rounded-full border-4 border-[#0b0f1a] cursor-pointer transition-all duration-300 ${activeExperience === exp.id
                             ? 'bg-[#2ecc71] shadow-[0_0_20px_rgba(46,204,113,0.6)]'
                             : 'bg-[#2ecc71]/60 hover:bg-[#2ecc71]'
-                        }`}
+                          }`}
                         onClick={() => setActiveExperience(activeExperience === exp.id ? null : exp.id)}
                       />
                     </div>
@@ -423,11 +420,10 @@ export default function PortfolioPage() {
                       <motion.div
                         whileHover={{ scale: 1.02, y: -5 }}
                         onClick={() => setActiveExperience(activeExperience === exp.id ? null : exp.id)}
-                        className={`p-8 rounded-3xl border cursor-pointer transition-all duration-500 ${
-                          activeExperience === exp.id
+                        className={`p-8 rounded-3xl border cursor-pointer transition-all duration-500 ${activeExperience === exp.id
                             ? 'bg-[#2ecc71]/10 border-[#2ecc71]/50 shadow-[0_0_40px_rgba(46,204,113,0.2)]'
                             : 'bg-slate-900/60 border-white/5 hover:border-[#2ecc71]/30 hover:bg-slate-900/80'
-                        }`}
+                          }`}
                       >
                         {/* Date Badge */}
                         <div className="flex items-center gap-2 mb-4">
@@ -487,9 +483,8 @@ export default function PortfolioPage() {
                         <div className="flex items-center justify-center mt-4">
                           <ChevronDown
                             size={18}
-                            className={`text-slate-500 transition-transform duration-300 ${
-                              activeExperience === exp.id ? 'rotate-180 text-[#2ecc71]' : ''
-                            }`}
+                            className={`text-slate-500 transition-transform duration-300 ${activeExperience === exp.id ? 'rotate-180 text-[#2ecc71]' : ''
+                              }`}
                           />
                         </div>
                       </motion.div>
@@ -584,6 +579,7 @@ export default function PortfolioPage() {
       <footer className="py-8 border-t border-white/5">
         <div className="container mx-auto px-6 max-w-7xl flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
           <div className="flex gap-8">
+            <a href="/blog" className="text-slate-500 hover:text-[#2ecc71] transition-all uppercase text-[10px] font-bold tracking-widest">Blog</a>
             <a href="https://www.linkedin.com/in/neazmorshed222/" target="_blank" className="text-slate-500 hover:text-[#2ecc71] transition-all uppercase text-[10px] font-bold tracking-widest">LinkedIn</a>
             <a href="https://www.fiverr.com/neaz222" target="_blank" className="text-slate-500 hover:text-[#2ecc71] transition-all uppercase text-[10px] font-bold tracking-widest">Fiverr</a>
             <a href="https://www.facebook.com/neazmorshed001/" target="_blank" className="text-slate-500 hover:text-[#2ecc71] transition-all uppercase text-[10px] font-bold tracking-widest">Facebook</a>

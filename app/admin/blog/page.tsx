@@ -3,12 +3,17 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import NextLink from 'next/link';
+import dynamic from 'next/dynamic';
 import {
     ArrowLeft, Plus, Search, Edit2, Trash2, Save, X,
     Image as ImageIcon, Video, Link as LinkIcon, Eye,
-    Loader2, CheckCircle, AlertCircle
+    Loader2, CheckCircle, AlertCircle, Upload
 } from 'lucide-react';
 import { supabase } from '../../../lib/supabase';
+import 'react-quill/dist/quill.snow.css';
+
+// Dynamically import ReactQuill to avoid SSR issues
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 // Blog Interface
 interface BlogPost {
@@ -33,7 +38,27 @@ export default function BlogAdminPage() {
     const [isEditing, setIsEditing] = useState(false);
     const [currentBlog, setCurrentBlog] = useState<Partial<BlogPost>>({});
     const [saving, setSaving] = useState(false);
+    const [uploadingImage, setUploadingImage] = useState(false);
     const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null);
+
+    // Quill modules configuration
+    const modules = {
+        toolbar: [
+            [{ 'header': [1, 2, 3, false] }],
+            ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+            ['link', 'image', 'video'],
+            [{ 'align': [] }],
+            ['clean']
+        ],
+    };
+
+    const formats = [
+        'header',
+        'bold', 'italic', 'underline', 'strike', 'blockquote',
+        'list', 'bullet', 'indent',
+        'link', 'image', 'video', 'align'
+    ];
 
     // Fetch blogs
     const fetchBlogs = async () => {
@@ -63,6 +88,38 @@ export default function BlogAdminPage() {
     const showNotification = (type: 'success' | 'error', message: string) => {
         setNotification({ type, message });
         setTimeout(() => setNotification(null), 3000);
+    };
+
+    // Handle File Upload
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (!e.target.files || e.target.files.length === 0) return;
+
+        const file = e.target.files[0];
+        setUploadingImage(true);
+
+        try {
+            const fileExt = file.name.split('.').pop();
+            const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+            const filePath = `blog-covers/${fileName}`;
+
+            const { error: uploadError } = await supabase.storage
+                .from('portfolio-assets') // Reusing existing bucket
+                .upload(filePath, file);
+
+            if (uploadError) throw uploadError;
+
+            const { data: { publicUrl } } = supabase.storage
+                .from('portfolio-assets')
+                .getPublicUrl(filePath);
+
+            setCurrentBlog({ ...currentBlog, cover_image: publicUrl });
+            showNotification('success', 'Image uploaded successfully');
+        } catch (error: any) {
+            console.error('Error uploading image:', error);
+            showNotification('error', error.message || 'Failed to upload image');
+        } finally {
+            setUploadingImage(false);
+        }
     };
 
     // Handle Edit/Create
@@ -281,15 +338,27 @@ export default function BlogAdminPage() {
                             <div>
                                 <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">
                                     <ImageIcon size={14} />
-                                    Cover Image URL
+                                    Cover Image
                                 </label>
-                                <input
-                                    type="text"
-                                    value={currentBlog.cover_image || ''}
-                                    onChange={(e) => setCurrentBlog({ ...currentBlog, cover_image: e.target.value })}
-                                    className="w-full bg-slate-950 border border-white/10 rounded-xl p-4 text-white focus:border-[#2ecc71] outline-none transition-colors"
-                                    placeholder="https://..."
-                                />
+                                <div className="flex gap-2">
+                                    <input
+                                        type="text"
+                                        value={currentBlog.cover_image || ''}
+                                        onChange={(e) => setCurrentBlog({ ...currentBlog, cover_image: e.target.value })}
+                                        className="flex-1 bg-slate-950 border border-white/10 rounded-xl p-4 text-white focus:border-[#2ecc71] outline-none transition-colors"
+                                        placeholder="https://..."
+                                    />
+                                    <label className="flex items-center justify-center p-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl cursor-pointer transition-colors">
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleImageUpload}
+                                            className="hidden"
+                                            disabled={uploadingImage}
+                                        />
+                                        {uploadingImage ? <Loader2 size={20} className="animate-spin text-[#2ecc71]" /> : <Upload size={20} className="text-[#2ecc71]" />}
+                                    </label>
+                                </div>
                                 {currentBlog.cover_image && (
                                     <div className="mt-4 aspect-video rounded-xl overflow-hidden border border-white/10">
                                         <img src={currentBlog.cover_image} alt="Preview" className="w-full h-full object-cover" />
@@ -327,16 +396,19 @@ export default function BlogAdminPage() {
                         </div>
                     </div>
 
-                    {/* Content Editor (Full Width) */}
+                    {/* Rich Text Editor */}
                     <div className="mt-8">
-                        <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Content (HTML/Markdown)</label>
-                        <textarea
-                            value={currentBlog.content || ''}
-                            onChange={(e) => setCurrentBlog({ ...currentBlog, content: e.target.value })}
-                            rows={15}
-                            className="w-full bg-slate-950 border border-white/10 rounded-xl p-4 text-white font-mono text-sm focus:border-[#2ecc71] outline-none transition-colors"
-                            placeholder="Write your blog content here..."
-                        />
+                        <label className="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2">Content</label>
+                        <div className="bg-slate-950 border border-white/10 rounded-xl overflow-hidden text-black blog-editor">
+                            <ReactQuill
+                                theme="snow"
+                                value={currentBlog.content || ''}
+                                onChange={(value) => setCurrentBlog({ ...currentBlog, content: value })}
+                                modules={modules}
+                                formats={formats}
+                                className="bg-white min-h-[400px]"
+                            />
+                        </div>
                     </div>
 
                     {/* Action Buttons */}
