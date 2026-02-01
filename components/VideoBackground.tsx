@@ -1,6 +1,7 @@
 "use client";
 
-import React from 'react';
+import React, { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface VideoBackgroundProps {
   type: 'skills' | 'services' | 'experience' | 'reviews' | 'contact';
@@ -17,26 +18,43 @@ const videoSources: Record<string, string> = {
 };
 
 export default function VideoBackground({ type, opacity = 0.3 }: VideoBackgroundProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1.1, 1.2]);
+
   return (
-    <div className="absolute inset-0 overflow-hidden z-0">
-      {/* Video element */}
-      <video
-        autoPlay
-        loop
-        muted
-        playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ opacity }}
+    <div ref={containerRef} className="absolute inset-0 overflow-hidden z-0">
+      {/* Video element with Parallax */}
+      <motion.div
+        style={{ y, scale }}
+        className="absolute inset-0 w-full h-full"
       >
-        <source src={videoSources[type]} type="video/mp4" />
-      </video>
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-full object-cover"
+          style={{ opacity }}
+        >
+          <source src={videoSources[type]} type="video/mp4" />
+        </video>
+      </motion.div>
 
-      {/* Lighter gradient overlays - more transparent to show video */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0b0f1a]/60 via-transparent to-[#0b0f1a]/60" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#0b0f1a]/40 via-transparent to-[#0b0f1a]/40" />
+      {/* Dark Overlay for "Dark Overlay Effect" */}
+      <div className="absolute inset-0 bg-[#0b0f1a]/80" />
 
-      {/* Subtle color tint */}
-      <div className="absolute inset-0 bg-[#2ecc71]/3" />
+      {/* Gradient Overlays for depth */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f1a] via-[#0b0f1a]/40 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0b0f1a] via-transparent to-[#0b0f1a]/40" />
+
+      {/* Subtle color tint based on brand */}
+      <div className="absolute inset-0 bg-[#2ecc71]/5 mix-blend-overlay" />
     </div>
   );
 }

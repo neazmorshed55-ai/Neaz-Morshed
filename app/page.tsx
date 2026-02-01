@@ -396,8 +396,8 @@ export default function PortfolioPage() {
                       <motion.div
                         whileHover={{ scale: 1.3 }}
                         className={`w-6 h-6 rounded-full border-4 border-[#0b0f1a] cursor-pointer transition-all duration-300 ${activeExperience === exp.id
-                            ? 'bg-[#2ecc71] shadow-[0_0_20px_rgba(46,204,113,0.6)]'
-                            : 'bg-[#2ecc71]/60 hover:bg-[#2ecc71]'
+                          ? 'bg-[#2ecc71] shadow-[0_0_20px_rgba(46,204,113,0.6)]'
+                          : 'bg-[#2ecc71]/60 hover:bg-[#2ecc71]'
                           }`}
                         onClick={() => setActiveExperience(activeExperience === exp.id ? null : exp.id)}
                       />
@@ -408,8 +408,8 @@ export default function PortfolioPage() {
                       <motion.div
                         whileHover={{ scale: 1.3 }}
                         className={`w-5 h-5 rounded-full border-4 border-[#0b0f1a] cursor-pointer transition-all duration-300 ${activeExperience === exp.id
-                            ? 'bg-[#2ecc71] shadow-[0_0_20px_rgba(46,204,113,0.6)]'
-                            : 'bg-[#2ecc71]/60 hover:bg-[#2ecc71]'
+                          ? 'bg-[#2ecc71] shadow-[0_0_20px_rgba(46,204,113,0.6)]'
+                          : 'bg-[#2ecc71]/60 hover:bg-[#2ecc71]'
                           }`}
                         onClick={() => setActiveExperience(activeExperience === exp.id ? null : exp.id)}
                       />
@@ -421,8 +421,8 @@ export default function PortfolioPage() {
                         whileHover={{ scale: 1.02, y: -5 }}
                         onClick={() => setActiveExperience(activeExperience === exp.id ? null : exp.id)}
                         className={`p-8 rounded-3xl border cursor-pointer transition-all duration-500 ${activeExperience === exp.id
-                            ? 'bg-[#2ecc71]/10 border-[#2ecc71]/50 shadow-[0_0_40px_rgba(46,204,113,0.2)]'
-                            : 'bg-slate-900/60 border-white/5 hover:border-[#2ecc71]/30 hover:bg-slate-900/80'
+                          ? 'bg-[#2ecc71]/10 border-[#2ecc71]/50 shadow-[0_0_40px_rgba(46,204,113,0.2)]'
+                          : 'bg-slate-900/60 border-white/5 hover:border-[#2ecc71]/30 hover:bg-slate-900/80'
                           }`}
                       >
                         {/* Date Badge */}
@@ -580,6 +580,7 @@ export default function PortfolioPage() {
         <div className="container mx-auto px-6 max-w-7xl flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
           <div className="flex gap-8">
             <a href="/blog" className="text-slate-500 hover:text-[#2ecc71] transition-all uppercase text-[10px] font-bold tracking-widest">Blog</a>
+            <a href="https://linktr.ee/neazmorshed" target="_blank" className="text-slate-500 hover:text-[#2ecc71] transition-all uppercase text-[10px] font-bold tracking-widest">Linktree</a>
             <a href="https://www.linkedin.com/in/neazmorshed222/" target="_blank" className="text-slate-500 hover:text-[#2ecc71] transition-all uppercase text-[10px] font-bold tracking-widest">LinkedIn</a>
             <a href="https://www.fiverr.com/neaz222" target="_blank" className="text-slate-500 hover:text-[#2ecc71] transition-all uppercase text-[10px] font-bold tracking-widest">Fiverr</a>
             <a href="https://www.facebook.com/neazmorshed001/" target="_blank" className="text-slate-500 hover:text-[#2ecc71] transition-all uppercase text-[10px] font-bold tracking-widest">Facebook</a>
