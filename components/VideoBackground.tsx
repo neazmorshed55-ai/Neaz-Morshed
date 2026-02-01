@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
 interface VideoBackgroundProps {
-  type: 'skills' | 'services' | 'experience' | 'reviews' | 'contact';
+  type: 'skills' | 'services' | 'experience' | 'reviews' | 'contact' | 'calendar';
   opacity?: number;
 }
 
@@ -15,6 +15,7 @@ const videoSources: Record<string, string> = {
   experience: 'https://videos.pexels.com/video-files/856428/856428-hd_1920_1080_25fps.mp4', // Time-lapse city/progress
   reviews: 'https://videos.pexels.com/video-files/3255275/3255275-uhd_2560_1440_25fps.mp4', // Soft abstract light
   contact: 'https://videos.pexels.com/video-files/852388/852388-hd_1920_1080_30fps.mp4', // Globe/connection theme
+  calendar: 'https://videos.pexels.com/video-files/6774133/6774133-uhd_2732_1440_25fps.mp4', // Calendar/Schedule theme
 };
 
 export default function VideoBackground({ type, opacity = 0.3 }: VideoBackgroundProps) {

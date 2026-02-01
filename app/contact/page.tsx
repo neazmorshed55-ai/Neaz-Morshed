@@ -252,55 +252,150 @@ export default function ContactPage() {
         {/* Calendly Section - Lazy Loaded with Intersection Observer */}
         <section
           ref={calendlySectionRef}
-          className="py-12 container mx-auto px-6 max-w-7xl bg-[#000000] relative rounded-[3rem] border border-[#39ff14]/20"
+          className="py-12 container mx-auto px-6 max-w-7xl relative rounded-[3rem] overflow-hidden"
           style={{ minHeight: '700px' }}
         >
+          {/* Animated Gradient Background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#0b0f1a] via-[#0d1424] to-[#0b0f1a]" />
+
+          {/* Animated Gradient Orbs */}
+          <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[#2ecc71]/10 rounded-full blur-[150px] animate-pulse" />
+          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[#39ff14]/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 left-0 w-[300px] h-[300px] bg-[#27ae60]/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '2s' }} />
+
+          {/* Decorative Border with Glow */}
+          <div className="absolute inset-0 rounded-[3rem] border border-[#2ecc71]/30 shadow-[0_0_50px_rgba(46,204,113,0.1),inset_0_0_50px_rgba(46,204,113,0.05)]" />
+
+          {/* Corner Decorations */}
+          <div className="absolute top-4 left-4 w-20 h-20 border-l-2 border-t-2 border-[#2ecc71]/50 rounded-tl-2xl" />
+          <div className="absolute top-4 right-4 w-20 h-20 border-r-2 border-t-2 border-[#2ecc71]/50 rounded-tr-2xl" />
+          <div className="absolute bottom-4 left-4 w-20 h-20 border-l-2 border-b-2 border-[#2ecc71]/50 rounded-bl-2xl" />
+          <div className="absolute bottom-4 right-4 w-20 h-20 border-r-2 border-b-2 border-[#2ecc71]/50 rounded-br-2xl" />
+
           {/* Section Header */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-8"
+            className="text-center mb-8 relative z-20"
           >
-            <span className="text-[#39ff14] text-[11px] font-black uppercase tracking-[0.5em] mb-4 block">Schedule a Call</span>
-            <h2 className="text-3xl lg:text-4xl font-black uppercase tracking-tighter">Book a Meeting</h2>
+            <span className="text-[#2ecc71] text-[11px] font-black uppercase tracking-[0.5em] mb-4 block">Schedule a Call</span>
+            <h2 className="text-3xl lg:text-4xl font-black uppercase tracking-tighter">
+              Book a <span className="text-gradient">Meeting</span>
+            </h2>
           </motion.div>
 
-          {/* Loading Placeholder */}
+          {/* Loading Placeholder with Video Background */}
           {!isCalendlyLoaded && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-[#000000] rounded-[3rem]">
-              <div className="relative">
-                {/* Outer glow ring */}
-                <div className="absolute inset-0 w-20 h-20 rounded-full bg-[#39ff14]/20 animate-ping" />
-                {/* Inner spinning ring */}
-                <div className="w-20 h-20 rounded-full border-4 border-[#39ff14]/30 border-t-[#39ff14] animate-spin" />
+            <div className="absolute inset-0 flex flex-col items-center justify-center rounded-[3rem] overflow-hidden z-10">
+              {/* Video Background */}
+              <div className="absolute inset-0">
+                <video
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="w-full h-full object-cover opacity-30"
+                >
+                  <source src="https://videos.pexels.com/video-files/6774133/6774133-uhd_2732_1440_25fps.mp4" type="video/mp4" />
+                </video>
+                {/* Video Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f1a] via-[#0b0f1a]/70 to-[#0b0f1a]/90" />
               </div>
-              <p className="mt-6 text-[#39ff14] text-sm font-bold uppercase tracking-widest animate-pulse">
-                Loading Calendar...
-              </p>
-              <div className="mt-4 flex gap-1">
-                <span className="w-2 h-2 bg-[#39ff14] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="w-2 h-2 bg-[#39ff14] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="w-2 h-2 bg-[#39ff14] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+
+              {/* Loading Animation */}
+              <div className="relative z-10 flex flex-col items-center">
+                {/* Calendar Icon Animation */}
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className="relative mb-8"
+                >
+                  {/* Outer glow rings */}
+                  <div className="absolute inset-0 w-24 h-24 rounded-full bg-[#2ecc71]/20 animate-ping" />
+                  <div className="absolute inset-0 w-24 h-24 rounded-full bg-[#2ecc71]/10 animate-pulse" style={{ animationDelay: '0.5s' }} />
+
+                  {/* Calendar Icon Container */}
+                  <div className="relative w-24 h-24 rounded-2xl bg-gradient-to-br from-[#2ecc71] to-[#27ae60] shadow-[0_0_40px_rgba(46,204,113,0.5)] flex items-center justify-center">
+                    <div className="text-slate-900">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Loading Text */}
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="text-[#2ecc71] text-lg font-black uppercase tracking-widest mb-4"
+                >
+                  Loading Calendar
+                </motion.p>
+
+                {/* Animated Progress Bar */}
+                <div className="w-48 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                    className="h-full bg-gradient-to-r from-[#2ecc71] via-[#39ff14] to-[#2ecc71] rounded-full shadow-[0_0_10px_rgba(46,204,113,0.5)]"
+                  />
+                </div>
+
+                {/* Bouncing dots */}
+                <div className="mt-6 flex gap-2">
+                  <motion.span
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 0.6, repeat: Infinity, delay: 0 }}
+                    className="w-3 h-3 bg-[#2ecc71] rounded-full shadow-[0_0_10px_rgba(46,204,113,0.5)]"
+                  />
+                  <motion.span
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 0.6, repeat: Infinity, delay: 0.15 }}
+                    className="w-3 h-3 bg-[#2ecc71] rounded-full shadow-[0_0_10px_rgba(46,204,113,0.5)]"
+                  />
+                  <motion.span
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
+                    className="w-3 h-3 bg-[#2ecc71] rounded-full shadow-[0_0_10px_rgba(46,204,113,0.5)]"
+                  />
+                </div>
+
+                {/* Subtitle */}
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.4 }}
+                  className="mt-6 text-slate-400 text-sm font-medium"
+                >
+                  Preparing your scheduling experience...
+                </motion.p>
               </div>
             </div>
           )}
 
           {/* Calendly Widget - Only renders when visible */}
           {isCalendlyVisible && (
-            <div
-              className="w-full relative z-10 transition-opacity duration-500"
-              style={{
-                height: '650px',
-                opacity: isCalendlyLoaded ? 1 : 0
-              }}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: isCalendlyLoaded ? 1 : 0, scale: isCalendlyLoaded ? 1 : 0.98 }}
+              transition={{ duration: 0.5 }}
+              className="w-full relative z-20"
+              style={{ height: '650px' }}
             >
               <div
-                className="calendly-inline-widget w-full h-full"
-                data-url="https://calendly.com/neazmd-tamim/new-meeting?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=000000&text_color=ffffff&primary_color=39ff14"
+                className="calendly-inline-widget w-full h-full rounded-2xl overflow-hidden"
+                data-url="https://calendly.com/neazmd-tamim/new-meeting?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0b0f1a&text_color=ffffff&primary_color=2ecc71"
                 style={{ minWidth: '320px', height: '100%' }}
               />
-            </div>
+            </motion.div>
           )}
         </section>
       </main>
