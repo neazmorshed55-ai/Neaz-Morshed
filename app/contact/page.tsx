@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import Script from 'next/script';
 import {
   Mail, Globe, CheckCircle2, Send, Loader2,
   MapPin, Clock, MessageSquare, Linkedin, Facebook
@@ -13,6 +14,7 @@ import VideoBackground from '../../components/VideoBackground';
 
 export default function ContactPage() {
   const [formStatus, setFormStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [isCalendarLoaded, setIsCalendarLoaded] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -219,15 +221,26 @@ export default function ContactPage() {
           </div>
         </section>
         {/* Calendly Section */}
-        <section className="py-20 container mx-auto px-6 max-w-7xl bg-[#0b0f1a]">
-          <div className="w-full" style={{ minWidth: '320px', height: '700px' }}>
+
+        <section className="py-20 container mx-auto px-6 max-w-7xl bg-[#0b0f1a] relative min-h-[700px]">
+          {!isCalendarLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Loader2 className="w-12 h-12 text-[#2ecc71] animate-spin" />
+            </div>
+          )}
+
+          <div className="w-full h-[700px] relative z-10">
             <div
               className="calendly-inline-widget w-full h-full"
               data-url="https://calendly.com/neazmd-tamim/new-meeting?hide_landing_page_details=1&hide_gdpr_banner=1&background_color=0b0f1a&text_color=ffffff&primary_color=2ecc71"
-              style={{ minWidth: '320px', height: '700px' }}
+              style={{ minWidth: '320px', height: '100%' }}
             />
-            <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
           </div>
+          <Script
+            src="https://assets.calendly.com/assets/external/widget.js"
+            strategy="lazyOnload"
+            onLoad={() => setIsCalendarLoaded(true)}
+          />
         </section>
       </main>
 
